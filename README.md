@@ -57,6 +57,28 @@ lib/
 public/img/         Fotos en WebP
 ```
 
+## Cambiar una foto
+
+1. Deja el archivo nuevo en `originales/` (esa carpeta no se versiona: solo
+   guarda los archivos pesados sin optimizar).
+2. Apunta a él en `scripts/optimizar-imagenes.mjs`.
+3. Corre `node scripts/optimizar-imagenes.mjs`. Genera el WebP en `public/img/`
+   —de ~2 MB a ~80 KB— y, si es la foto del hero, regenera además la imagen de
+   Open Graph.
+4. Borra `.next` antes de volver a mirar: si el nombre del archivo no cambia,
+   el servidor sigue sirviendo la versión anterior desde su caché y parece que
+   el reemplazo no funcionó.
+
+Dos cosas que conviene revisar al cambiar la foto del hero:
+
+- **El recorte de la imagen de Open Graph.** Es la miniatura que ve quien
+  recibe el enlace por WhatsApp. Sale de una banda apaisada de una foto
+  vertical, así que basta con que la cara esté unos centímetros más abajo para
+  que el recorte corte la sonrisa. Se ajusta con `RECORTE_Y` en el script, y hay
+  que mirar el resultado.
+- **El texto alternativo** en `lib/contenido.ts`, que describe la foto para
+  quien no puede verla y para Google.
+
 ## Paleta
 
 Todos los colores viven en `app/globals.css`, dentro de `@theme`. Cambiar la
