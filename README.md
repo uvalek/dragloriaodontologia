@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Landing — Dra. Gloria Portillo Atempa
 
-## Getting Started
+Página del consultorio dental de la Dra. Gloria Portillo Atempa (Zacatelco, Tlaxcala).
+Objetivo único: que el visitante escriba por WhatsApp para agendar.
 
-First, run the development server:
+Construida sobre el diseño aprobado en Claude Design
+(`Landing page consultorio dental Tlaxcala.zip`, en la carpeta de arriba).
+
+## Cómo correrla
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Otros comandos:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Comando | Qué hace |
+|---|---|
+| `npm run build` | Compila para producción |
+| `npm start` | Sirve el build compilado |
+| `npm run lint` | Revisa el código |
+| `node scripts/optimizar-imagenes.mjs` | Reconvierte las fotos a WebP (solo si se cambian las originales) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Dónde tocar cada cosa
 
-## Learn More
+**Casi todo lo que vas a querer cambiar está en un solo archivo: `lib/contenido.ts`.**
 
-To learn more about Next.js, take a look at the following resources:
+| Quiero cambiar… | Archivo |
+|---|---|
+| Teléfono, WhatsApp, mensaje precargado | `lib/contenido.ts` → `contacto` |
+| Dirección, cédula, horarios | `lib/contenido.ts` → `consultorio`, `horarios` |
+| Textos de cualquier sección | `lib/contenido.ts` |
+| Agregar o quitar un tratamiento | `lib/contenido.ts` → `servicios` (la rejilla se reacomoda sola) |
+| Reseñas | `lib/contenido.ts` → `resenas` |
+| Colores y tipografías | `app/globals.css` |
+| Título y descripción para Google | `app/layout.tsx` → `metadata` |
+| Ficha del negocio para Google | `lib/datos-negocio.ts` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Si agregas un servicio nuevo necesitas también un icono: se declara en
+`components/IconoServicio.tsx` y se referencia por nombre desde `contenido.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estructura
 
-## Deploy on Vercel
+```
+app/
+  layout.tsx        Fuentes, metadatos SEO, ficha JSON-LD, analítica
+  page.tsx          Ordena las 8 secciones
+  globals.css       Tokens del diseño y clases .btn / .card / .plate
+  icon.svg          Favicon
+  sitemap.ts        Mapa del sitio
+  robots.ts
+components/         Una sección = un componente
+lib/
+  contenido.ts      Todo el texto
+  datos-negocio.ts  Datos estructurados para Google
+public/img/         Fotos en WebP
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Animaciones
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Se controlan con un atributo en el HTML, no con código en cada componente:
+
+```jsx
+<h2 data-animar="subir" style={{ "--retraso": "90ms" }}>…</h2>
+```
+
+| Valor | Efecto | Cuándo usarlo |
+|---|---|---|
+| `subir` | Aparece desplazándose hacia arriba | Títulos, párrafos, tarjetas |
+| `aparecer` | Solo desvanecido | Fotos, mapa, filas de tabla |
+| `crecer` | Aparece creciendo desde el 94 % | Cifras grandes |
+| `estrellas` | Las cinco estrellas se encienden en cadena | Solo `<Estrellas animar />` |
+
+`--retraso` escalona los elementos de una misma fila. `data-entrada` es la
+variante del hero, que anima con CSS puro sin esperar al JavaScript.
+
+Reglas que conviene no romper:
+
+- Solo se anima `opacity` y `transform`. Cualquier otra propiedad provoca que
+  el navegador recalcule el layout y la página dé tirones al hacer scroll.
+- La foto del hero anima **sin opacidad** (`data-entrada="escala"`). Es el
+  elemento que Google cronometra como LCP: si arrancara invisible, la métrica
+  de velocidad empeoraría.
+- Si el visitante activó "reducir movimiento" en su sistema, todo se muestra de
+  golpe. No es un detalle estético: para algunas personas el movimiento en
+  pantalla produce mareo.
+- Sin JavaScript la página se ve completa igual, gracias a la regla dentro de
+  `<noscript>` en `app/layout.tsx`.
+
+## Notas técnicas
+
+- Todo se genera como HTML estático. Los únicos componentes de cliente son
+  `EnlaceWhatsApp` (registra el clic en analítica), `AnimarAlEntrar` (el
+  observador de las animaciones) y `Contador` (los números que suben).
+- El responsive no usa media queries: el diseño está armado con rejillas
+  `auto-fit` y `clamp()`, que se adaptan solas. Si agregas una sección nueva,
+  sigue ese mismo patrón en vez de meter breakpoints.
+- Las fuentes se auto-hospedan con `next/font`; no se piden a Google.
+- El mapa es un iframe con `loading="lazy"` y no necesita clave de API.
+
+## Antes de conectar el dominio propio
+
+Hay tres lugares con la URL `https://dra-gloria-portillo.vercel.app` que hay que
+actualizar: `app/layout.tsx` (constante `SITIO`), `app/sitemap.ts` y
+`app/robots.ts`.

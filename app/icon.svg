@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Favicon: el mismo monograma del encabezado.
+       Fondo verde sólido en vez del contorno dorado del sitio, porque a 16 px
+       un borde de 1 px se pierde y las iniciales quedarían flotando. -->
+  <rect width="64" height="64" rx="6" fill="#3b4a43"/>
+  <text x="32" y="44" text-anchor="middle"
+        font-family="Cormorant Garamond, Georgia, 'Times New Roman', serif"
+        font-size="34" letter-spacing="1" fill="#e1ad66">GP</text>
+</svg>

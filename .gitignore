@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# imágenes originales sin optimizar (ver scripts/optimizar-imagenes.mjs)
+/originales
