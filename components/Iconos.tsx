@@ -2,7 +2,7 @@
  * Iconos SVG del diseño, trazados a mano (no vienen de ninguna librería).
  *
  * Todos usan `stroke="currentColor"` para que hereden el color del contexto:
- * gris tenue en el encabezado, dorado en las tarjetas de servicios.
+ * gris tenue en el encabezado, rosa en las tarjetas de servicios.
  */
 
 type PropsIcono = {

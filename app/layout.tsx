@@ -65,9 +65,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  /* Color de la barra del navegador en móvil: el mismo crema del fondo, para
+  /* Color de la barra del navegador en móvil: el mismo rosa del fondo, para
      que la interfaz del celular se funda con la página. */
-  themeColor: "#f3f2f2",
+  themeColor: "#fdf8f8",
 };
 
 export default function RootLayout({

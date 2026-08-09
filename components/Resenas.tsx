@@ -9,8 +9,8 @@ import { calificacion, contacto, resenas } from "@/lib/contenido";
  * perfil para que cualquiera pueda comprobarlas, que es justo lo que las hace
  * creíbles.
  *
- * Fondo verde claro para separar visualmente esta sección de las de arriba y
- * abajo, que van sobre el crema.
+ * Fondo rosa un punto más saturado, para separar visualmente esta sección de
+ * las de arriba y abajo.
  */
 export default function Resenas() {
   return (
@@ -18,7 +18,7 @@ export default function Resenas() {
       id="resenas"
       className="border-t border-b"
       style={{
-        background: "var(--color-verde-claro)",
+        background: "var(--color-rosa-suave)",
         borderColor: "var(--color-divider)",
       }}
     >
@@ -162,7 +162,7 @@ export default function Resenas() {
                 style={{
                   fontSize: 12.5,
                   letterSpacing: "0.06em",
-                  color: "color-mix(in srgb, var(--color-text) 50%, transparent)",
+                  color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
                   margin: 0,
                 }}
               >
@@ -188,7 +188,7 @@ export default function Resenas() {
           <span
             style={{
               fontSize: 13.5,
-              color: "color-mix(in srgb, var(--color-text) 60%, transparent)",
+              color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
             }}
           >
             Calificación promedio de {calificacion.total} pacientes verificados

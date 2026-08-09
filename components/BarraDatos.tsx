@@ -2,22 +2,28 @@ import Contador from "./Contador";
 import Estrellas from "./Estrellas";
 import { barraDatos, calificacion } from "@/lib/contenido";
 
-/** Crema sobre el verde, con la opacidad que usa el diseño para el texto de apoyo. */
-const CREMA_TENUE = "color-mix(in srgb, #f3f2f2 78%, transparent)";
+/** Texto de apoyo: la misma tinta del cuerpo, rebajada para que no compita con
+    la cifra que tiene encima. Al 72 % sobre el rosa de la banda da 8.6:1. */
+const TINTA_TENUE = "color-mix(in srgb, var(--color-text) 72%, transparent)";
 
 /**
- * Banda verde con los cuatro datos duros que sostienen la confianza:
- * calificación, años de práctica, cédula profesional y horario.
+ * Banda con los cuatro datos duros que sostienen la confianza: calificación,
+ * años de práctica, cédula profesional y horario.
  *
  * Va justo debajo del hero a propósito: son las objeciones que un paciente
  * nuevo resuelve antes de escribir por WhatsApp.
+ *
+ * En la paleta rosa esta banda es clara, no oscura. El bloque oscuro de la
+ * página es solo el del final, donde está el botón.
  *
  * Las columnas se separan con un borde a la izquierda. La primera no lo lleva,
  * porque una línea al inicio de la fila se leería como el borde de la sección.
  */
 export default function BarraDatos() {
   return (
-    <section style={{ background: "var(--color-verde)", color: "#f3f2f2" }}>
+    <section
+      style={{ background: "var(--color-banda)", color: "var(--color-text)" }}
+    >
       <div
         className="contenedor grid"
         style={{
@@ -30,7 +36,7 @@ export default function BarraDatos() {
             izquierda a derecha, en el mismo orden en que se leen. */}
         <Columna primera retraso={0}>
           <span className="flex items-baseline gap-2.5">
-            <Cifra style={{ color: "var(--color-accent-400)" }}>
+            <Cifra style={{ color: "var(--color-accent-700)" }}>
               <Contador
                 valor={calificacion.promedio}
                 decimales={1}
@@ -39,7 +45,7 @@ export default function BarraDatos() {
             </Cifra>
             <Estrellas
               id="estrellas-banda"
-              color="var(--color-accent-400)"
+              color="var(--color-accent-600)"
               animar
             />
           </span>
@@ -94,7 +100,7 @@ function Columna({
             ? {}
             : {
                 borderLeft:
-                  "1px solid color-mix(in srgb, #f3f2f2 22%, transparent)",
+                  "1px solid color-mix(in srgb, var(--color-text) 14%, transparent)",
                 paddingLeft: "clamp(20px, 3vw, 40px)",
               }),
         } as React.CSSProperties
@@ -132,7 +138,7 @@ function Cifra({
 
 function Pie({ children }: { children: React.ReactNode }) {
   return (
-    <span style={{ fontSize: 13.5, lineHeight: 1.5, color: CREMA_TENUE }}>
+    <span style={{ fontSize: 13.5, lineHeight: 1.5, color: TINTA_TENUE }}>
       {children}
     </span>
   );

@@ -57,6 +57,32 @@ lib/
 public/img/         Fotos en WebP
 ```
 
+## Paleta
+
+Todos los colores viven en `app/globals.css`, dentro de `@theme`. Cambiar la
+paleta entera es cambiar esos valores: ningún componente lleva un color escrito
+a mano.
+
+| Token | Uso |
+|---|---|
+| `--color-bg` | fondo rosa blanquecino de toda la página |
+| `--color-banda` | barra de datos (rosa pálido) |
+| `--color-rosa-suave` | fondo de la sección de reseñas |
+| `--color-vino` | CTA final y pie — el único bloque oscuro |
+| `--color-accent` | rosa principal: bordes, iconos, foco |
+| `--color-accent-700` | rosa oscuro de kickers y enlaces |
+| `--color-accent-300` | rosa claro, para texto sobre el vino |
+
+El criterio de la paleta es que **la página sea clara y el único bloque oscuro
+sea el del final**, donde está el botón de WhatsApp. Si esa banda se aclara
+también, el llamado a la acción pierde el contraste que lo hace destacar.
+
+Al elegir tonos hay un mínimo que respetar: 4.5:1 de contraste entre texto y
+fondo (3:1 en las cifras grandes). Es lo que separa un rosa que se ve bonito en
+una paleta de uno que no se lee en el celular de un paciente de 60 años. Para
+comprobarlo, cualquier medidor de contraste WCAG sirve; Lighthouse lo audita
+solo (`npx lighthouse http://localhost:3000 --only-categories=accessibility`).
+
 ## Animaciones
 
 Se controlan con un atributo en el HTML, no con código en cada componente:

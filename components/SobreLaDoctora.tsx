@@ -93,7 +93,7 @@ export default function SobreLaDoctora() {
               fontSize: 13.5,
               lineHeight: 1.6,
               margin: "24px 0 0",
-              color: "color-mix(in srgb, var(--color-text) 58%, transparent)",
+              color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
               "--retraso": "360ms",
             } as React.CSSProperties
           }

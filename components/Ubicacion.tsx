@@ -135,7 +135,7 @@ export default function Ubicacion() {
             data-animar="aparecer"
             style={{
               aspectRatio: "16 / 9",
-              background: "var(--color-verde-mapa)",
+              background: "var(--color-rosa-mapa)",
               border: "7px solid var(--color-surface)",
               outline: "1px solid var(--color-divider)",
             }}
@@ -155,7 +155,7 @@ export default function Ubicacion() {
             style={{
               fontSize: 12.5,
               marginTop: 12,
-              color: "color-mix(in srgb, var(--color-text) 55%, transparent)",
+              color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
             }}
           >
             {consultorio.direccion.completa}
@@ -172,7 +172,7 @@ function celda(cerrado: boolean): React.CSSProperties {
     padding: "12px 0",
     borderBottom: "1px solid var(--color-divider)",
     color: cerrado
-      ? "color-mix(in srgb, var(--color-text) 55%, transparent)"
+      ? "color-mix(in srgb, var(--color-text) 62%, transparent)"
       : undefined,
   };
 }

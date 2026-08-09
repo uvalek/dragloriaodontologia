@@ -57,7 +57,7 @@ export default function Encabezado() {
               style={{
                 fontSize: 10.5,
                 letterSpacing: "0.16em",
-                color: "color-mix(in srgb, var(--color-text) 55%, transparent)",
+                color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
                 marginTop: 3,
               }}
             >
