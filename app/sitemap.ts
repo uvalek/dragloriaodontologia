@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITIO } from "@/lib/sitio";
 
 /**
  * Mapa del sitio. Hoy la web es una sola página, así que tiene una única
@@ -8,7 +9,7 @@ import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://dra-gloria-portillo.vercel.app",
+      url: SITIO,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,

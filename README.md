@@ -99,8 +99,23 @@ Reglas que conviene no romper:
 - Las fuentes se auto-hospedan con `next/font`; no se piden a Google.
 - El mapa es un iframe con `loading="lazy"` y no necesita clave de API.
 
-## Antes de conectar el dominio propio
+## Despliegue en Vercel
 
-Hay tres lugares con la URL `https://dra-gloria-portillo.vercel.app` que hay que
-actualizar: `app/layout.tsx` (constante `SITIO`), `app/sitemap.ts` y
-`app/robots.ts`.
+El proyecto está en la raíz del repositorio, así que Vercel lo detecta solo. Al
+importarlo no hay que cambiar nada: framework Next.js, comandos por defecto y
+**cero variables de entorno**.
+
+Después del primer despliegue, activar **Web Analytics** en la pestaña Analytics
+del proyecto. Sin eso el evento `clic_whatsapp` no se registra en ningún lado.
+
+### Cuando haya dominio propio
+
+La URL del sitio (canónica, Open Graph, sitemap y robots) se resuelve sola desde
+`VERCEL_PROJECT_PRODUCTION_URL`, así que no hay nada escrito a mano. Al conectar
+un dominio, agregar en Vercel la variable:
+
+```
+NEXT_PUBLIC_SITIO = https://eldominio.com
+```
+
+y volver a desplegar. Ver `lib/sitio.ts`.

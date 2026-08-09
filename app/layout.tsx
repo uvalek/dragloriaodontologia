@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Lora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import AnimarAlEntrar from "@/components/AnimarAlEntrar";
 import { datosEstructurados } from "@/lib/datos-negocio";
+import { SITIO } from "@/lib/sitio";
 import "./globals.css";
 
 /**
@@ -27,9 +28,6 @@ const lora = Lora({
   variable: "--fuente-cuerpo",
   display: "swap",
 });
-
-/** URL de producción. Se ajusta cuando conectemos el dominio propio. */
-const SITIO = "https://dra-gloria-portillo.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITIO),
