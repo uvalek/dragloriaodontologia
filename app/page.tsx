@@ -1,38 +1,30 @@
-import Encabezado from "@/components/Encabezado";
 import Hero from "@/components/Hero";
-import BarraDatos from "@/components/BarraDatos";
-import SobreLaDoctora from "@/components/SobreLaDoctora";
-import Servicios from "@/components/Servicios";
+import Intro from "@/components/Intro";
+import Tratamientos from "@/components/Tratamientos";
 import Resenas from "@/components/Resenas";
 import PorQue from "@/components/PorQue";
 import Ubicacion from "@/components/Ubicacion";
-import LlamadoFinal from "@/components/LlamadoFinal";
+import PieDePagina from "@/components/PieDePagina";
 
 /**
- * Landing de la Dra. Gloria Portillo Atempa.
+ * La landing entera, en el orden en que un paciente nuevo resuelve sus dudas:
+ * quién es → qué hace → qué dicen de ella → por qué volver → dónde está.
  *
- * Es una sola página de scroll largo; cada sección del diseño vive en su propio
- * componente y aquí solo se ordenan. Salvo el enlace de WhatsApp (que necesita
- * registrar el clic), todo son Server Components: la página llega al navegador
- * como HTML ya renderizado.
- *
- * El orden no es casual: presentación → datos que dan confianza → quién es →
- * qué hace → qué dicen de ella → por qué ella → dónde está → agende.
+ * Cada sección es un componente de servidor: la página se genera como HTML
+ * estático y el navegador no ejecuta nada para verla. Lo único que corre en el
+ * cliente es el menú del móvil, el observador que revela las secciones y el
+ * registro de clics en WhatsApp.
  */
-export default function Home() {
+export default function Pagina() {
   return (
-    <>
-      <Encabezado />
-      <main>
-        <Hero />
-        <BarraDatos />
-        <SobreLaDoctora />
-        <Servicios />
-        <Resenas />
-        <PorQue />
-        <Ubicacion />
-        <LlamadoFinal />
-      </main>
-    </>
+    <main>
+      <Hero />
+      <Intro />
+      <Tratamientos />
+      <Resenas />
+      <PorQue />
+      <Ubicacion />
+      <PieDePagina />
+    </main>
   );
 }

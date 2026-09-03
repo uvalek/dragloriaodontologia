@@ -4,7 +4,7 @@ Página del consultorio dental de la Dra. Gloria Portillo Atempa (Zacatelco, Tla
 Objetivo único: que el visitante escriba por WhatsApp para agendar.
 
 Construida sobre el diseño aprobado en Claude Design
-(`Landing page consultorio dental Tlaxcala.zip`, en la carpeta de arriba).
+(`Dra Gloria PortilloV2.html`, en la carpeta de arriba).
 
 ## Cómo correrla
 
@@ -37,24 +37,38 @@ Otros comandos:
 | Título y descripción para Google | `app/layout.tsx` → `metadata` |
 | Ficha del negocio para Google | `lib/datos-negocio.ts` |
 
-Si agregas un servicio nuevo necesitas también un icono: se declara en
-`components/IconoServicio.tsx` y se referencia por nombre desde `contenido.ts`.
+Cada tratamiento puede llevar foto. Se pone en `servicios[].imagen`; con
+`null` la tarjeta se dibuja igual, con el fondo rosa liso.
 
 ## Estructura
 
 ```
 app/
-  layout.tsx        Fuentes, metadatos SEO, ficha JSON-LD, analítica
-  page.tsx          Ordena las 8 secciones
-  globals.css       Tokens del diseño y clases .btn / .card / .plate
+  layout.tsx        Fuente, metadatos SEO, ficha JSON-LD, analítica
+  page.tsx          Ordena las 7 secciones
+  globals.css       Tokens del diseño, botones y animaciones
   icon.svg          Favicon
   sitemap.ts        Mapa del sitio
   robots.ts
-components/         Una sección = un componente
+components/
+  Hero.tsx          Primera pantalla: video, nav y titular
+  MenuMovil.tsx     Menú desplegable (el único componente de cliente del hero)
+  Intro.tsx         Presentación de la doctora y las tres cifras
+  Tratamientos.tsx  Las seis tarjetas
+  Resenas.tsx       Reseñas de Google
+  PorQue.tsx        Las cuatro razones
+  Ubicacion.tsx     Dirección, horario y mapa
+  PieDePagina.tsx   Contacto repetido
+  EnlaceWhatsApp.tsx  Enlace que registra el clic
+  AnimarAlEntrar.tsx  Observador de las animaciones
 lib/
   contenido.ts      Todo el texto
   datos-negocio.ts  Datos estructurados para Google
-public/img/         Fotos en WebP
+  sitio.ts          URL pública
+public/
+  img/              Fotos en WebP
+  video/            Video del hero + su póster
+originales/         Archivos pesados sin optimizar (no se versiona)
 ```
 
 ## Cambiar una foto
@@ -81,55 +95,53 @@ Dos cosas que conviene revisar al cambiar la foto del hero:
 
 ## Paleta
 
-Todos los colores viven en `app/globals.css`, dentro de `@theme`. Cambiar la
-paleta entera es cambiar esos valores: ningún componente lleva un color escrito
-a mano.
+Todos los colores viven en `app/globals.css`, dentro de `@theme`. Ningún
+componente lleva un color escrito a mano.
 
 | Token | Uso |
 |---|---|
-| `--color-bg` | fondo rosa blanquecino de toda la página |
-| `--color-banda` | barra de datos (rosa pálido) |
-| `--color-rosa-suave` | fondo de la sección de reseñas |
-| `--color-vino` | CTA final y pie — el único bloque oscuro |
-| `--color-accent` | rosa principal: bordes, iconos, foco |
-| `--color-accent-700` | rosa oscuro de kickers y enlaces |
-| `--color-accent-300` | rosa claro, para texto sobre el vino |
-
-El criterio de la paleta es que **la página sea clara y el único bloque oscuro
-sea el del final**, donde está el botón de WhatsApp. Si esa banda se aclara
-también, el llamado a la acción pierde el contraste que lo hace destacar.
+| `--color-bg` | blanco, fondo de casi toda la página |
+| `--color-text` | vino `#3a1020`: titulares y cuerpo |
+| `--color-suave` | malva `#6e4a5a`: párrafos de apoyo |
+| `--color-acento` | rosa `#b4325e`: bordes, números, enlaces |
+| `--color-rosa-pal` | fondo de las tarjetas |
+| `--color-negro-hero` | fondo tras el video |
 
 Al elegir tonos hay un mínimo que respetar: 4.5:1 de contraste entre texto y
-fondo (3:1 en las cifras grandes). Es lo que separa un rosa que se ve bonito en
-una paleta de uno que no se lee en el celular de un paciente de 60 años. Para
-comprobarlo, cualquier medidor de contraste WCAG sirve; Lighthouse lo audita
-solo (`npx lighthouse http://localhost:3000 --only-categories=accessibility`).
+fondo (3:1 en gráficos y cifras grandes). Es lo que separa un color que se ve
+bonito en una paleta de uno que no se lee en el celular de un paciente de 60
+años. Lighthouse lo audita solo:
+
+```bash
+npx lighthouse http://localhost:3000 --only-categories=accessibility
+```
 
 ## Animaciones
 
 Se controlan con un atributo en el HTML, no con código en cada componente:
 
 ```jsx
-<h2 data-animar="subir" style={{ "--retraso": "90ms" }}>…</h2>
+<h2 data-animar style={{ "--retraso": "90ms" }}>…</h2>
 ```
 
-| Valor | Efecto | Cuándo usarlo |
+| Atributo | Efecto | Cuándo usarlo |
 |---|---|---|
-| `subir` | Aparece desplazándose hacia arriba | Títulos, párrafos, tarjetas |
-| `aparecer` | Solo desvanecido | Fotos, mapa, filas de tabla |
-| `crecer` | Aparece creciendo desde el 94 % | Cifras grandes |
-| `estrellas` | Las cinco estrellas se encienden en cadena | Solo `<Estrellas animar />` |
+| `data-animar` | Sube y aparece al entrar en pantalla | Casi todo |
+| `data-animar="aparecer"` | Solo desvanecido, sin desplazarse | Fotos y el mapa |
+| `data-entrada` | Anima al cargar, sin esperar al JavaScript | Solo el hero |
+| `data-entrada="escala"` | Solo escala, nunca opacidad | El video del hero |
 
-`--retraso` escalona los elementos de una misma fila. `data-entrada` es la
-variante del hero, que anima con CSS puro sin esperar al JavaScript.
+`--retraso` escalona los elementos de una misma fila.
 
 Reglas que conviene no romper:
 
-- Solo se anima `opacity` y `transform`. Cualquier otra propiedad provoca que
-  el navegador recalcule el layout y la página dé tirones al hacer scroll.
-- La foto del hero anima **sin opacidad** (`data-entrada="escala"`). Es el
-  elemento que Google cronometra como LCP: si arrancara invisible, la métrica
-  de velocidad empeoraría.
+- Solo se anima `opacity` y `transform`. Cualquier otra propiedad obliga al
+  navegador a recalcular el layout y la página da tirones al hacer scroll.
+- El video del hero anima **sin opacidad**. Es lo primero que se ve, y arrancar
+  invisible retrasaría la métrica de velocidad que mide Google.
+- El diseño original disparaba las animaciones al cargar la página, lo que hace
+  que las secciones de abajo terminen de animar antes de que nadie las vea.
+  Aquí se disparan al entrar en pantalla (`components/AnimarAlEntrar.tsx`).
 - Si el visitante activó "reducir movimiento" en su sistema, todo se muestra de
   golpe. No es un detalle estético: para algunas personas el movimiento en
   pantalla produce mareo.
@@ -140,10 +152,15 @@ Reglas que conviene no romper:
 
 - Todo se genera como HTML estático. Los únicos componentes de cliente son
   `EnlaceWhatsApp` (registra el clic en analítica), `AnimarAlEntrar` (el
-  observador de las animaciones) y `Contador` (los números que suben).
-- El responsive no usa media queries: el diseño está armado con rejillas
-  `auto-fit` y `clamp()`, que se adaptan solas. Si agregas una sección nueva,
-  sigue ese mismo patrón en vez de meter breakpoints.
+  observador de las animaciones) y `MenuMovil` (el desplegable del hero).
+- El responsive se resuelve casi entero con rejillas `auto-fit` y `clamp()`,
+  que se adaptan solas. La única media query es la de `.solo-escritorio` /
+  `.solo-movil`, para el menú. El diseño original decidía eso con banderas de
+  JavaScript; en CSS se resuelve antes de pintar y sin el salto que se ve
+  cuando el layout cambia después de hidratar.
+- **El video del hero** pesa 406 KB (de 7.9 MB originales), va `muted` y
+  `playsInline` —lo único que permite a iOS reproducirlo solo— y lleva póster,
+  que es lo que se ve mientras llega.
 - Las fuentes se auto-hospedan con `next/font`; no se piden a Google.
 - El mapa es un iframe con `loading="lazy"` y no necesita clave de API.
 

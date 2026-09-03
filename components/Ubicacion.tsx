@@ -1,178 +1,100 @@
-import { consultorio, contacto, horarios, ubicacion } from "@/lib/contenido";
+import { consultorio, contacto, horarios } from "@/lib/contenido";
 
 /**
- * Dónde está el consultorio y a qué hora abre.
+ * Dirección, horario y mapa.
  *
- * El diseño dejaba un hueco 16:9 con la nota "aquí puede ir el mapa incrustado
- * de Google en lugar de la foto"; se optó por el mapa, que resuelve mejor la
- * pregunta real del visitante: cómo llego.
+ * El mapa va en un iframe con `loading="lazy"`: sin eso, Google Maps carga su
+ * propio JavaScript en cuanto abre la página y se lleva por delante buena
+ * parte del presupuesto de carga, aunque el visitante nunca baje hasta aquí.
  */
 export default function Ubicacion() {
   return (
     <section
       id="ubicacion"
-      className="border-t"
-      style={{ borderColor: "var(--color-divider)" }}
+      style={{
+        background: "var(--color-bg)",
+        color: "var(--color-text)",
+        padding: "clamp(20px, 3vw, 40px) var(--lateral) clamp(44px, 5vw, 72px)",
+      }}
     >
       <div
-        className="contenedor grid items-center"
+        className="contenedor"
         style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "clamp(32px, 5vw, 76px)",
-          paddingBlock: "clamp(56px, 7vw, 104px)",
+          display: "grid",
+          gap: "clamp(20px, 2.6vw, 40px)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
+          alignItems: "start",
         }}
       >
-        <div>
-          <span
-            data-animar="subir"
-            className="block uppercase"
-            style={{
-              fontSize: 12,
-              letterSpacing: "0.16em",
-              color: "var(--color-accent-700)",
-            }}
-          >
-            {ubicacion.kicker}
-          </span>
+        <div data-animar style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2vw, 26px)" }}>
+          <h2 style={{ fontSize: "clamp(38px, 4.6vw, 66px)" }}>Dónde y cuándo</h2>
 
-          <h2
-            data-animar="subir"
-            style={
-              {
-                fontSize: "clamp(32px, 3.8vw, 46px)",
-                lineHeight: 1.12,
-                letterSpacing: "-0.008em",
-                margin: "18px 0 0",
-                "--retraso": "90ms",
-              } as React.CSSProperties
-            }
-          >
-            {ubicacion.titulo}
-          </h2>
-
-          {/* Dirección partida en tres líneas fijas, como en el diseño: se lee
-              igual que en un sobre y evita cortes raros al reducir el ancho. */}
-          <p
-            data-animar="subir"
-            style={
-              {
-                fontSize: 16.5,
-                lineHeight: 1.7,
-                margin: "24px 0 0",
-                maxWidth: "34ch",
-                "--retraso": "180ms",
-              } as React.CSSProperties
-            }
-          >
-            {consultorio.direccion.calle}, Centro,
+          <p style={{ margin: 0, fontSize: "clamp(17px, 1.5vw, 21px)", lineHeight: 1.45, color: "var(--color-suave)" }}>
+            {consultorio.direccion.calle}, {consultorio.direccion.colonia},
             <br />
-            Segunda Secc, {consultorio.direccion.codigoPostal}
+            {consultorio.direccion.codigoPostal}
             <br />
             {consultorio.direccion.ciudad}, {consultorio.direccion.estado}
           </p>
 
-          <table
-            className="cifras w-full"
-            style={{
-              maxWidth: 380,
-              borderCollapse: "collapse",
-              marginTop: 30,
-              fontSize: 15,
-            }}
-          >
-            <tbody>
-              {/* Cada renglón del horario entra por separado, como si se
-                  fueran escribiendo de arriba abajo. Solo desvanecido: las
-                  filas de tabla no aceptan `transform` de forma fiable en
-                  todos los navegadores. */}
-              {horarios.map((fila, i) => (
-                <tr
-                  key={fila.dias}
-                  data-animar="aparecer"
-                  style={
-                    { "--retraso": `${240 + i * 80}ms` } as React.CSSProperties
-                  }
-                >
-                  <td style={celda(fila.cerrado)}>{fila.dias}</td>
-                  <td style={{ ...celda(fila.cerrado), textAlign: "right" }}>
-                    {fila.horas}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div>
+            {horarios.map((h) => (
+              <div
+                key={h.dias}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 16,
+                  padding: "13px 0",
+                  borderTop: "1px solid var(--color-borde)",
+                  fontSize: "clamp(15px, 1.3vw, 17px)",
+                  color: h.cerrado ? "color-mix(in srgb, var(--color-suave) 78%, transparent)" : undefined,
+                }}
+              >
+                <span>{h.dias}</span>
+                <span style={{ fontVariantNumeric: "tabular-nums" }}>{h.horas}</span>
+              </div>
+            ))}
+          </div>
 
-          <div
-            data-animar="subir"
-            className="flex flex-wrap gap-3"
-            style={
-              { marginTop: 30, "--retraso": "480ms" } as React.CSSProperties
-            }
-          >
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
             <a
-              className="btn btn-primary"
-              href={contacto.mapa}
+              className="pildora pildora-rosa"
+              href={consultorio.enlaceMapa}
               target="_blank"
-              rel="noopener"
-              style={{ padding: "12px 22px", fontSize: 15 }}
+              rel="noopener noreferrer"
+              style={{ height: 52, padding: "0 26px", fontSize: 16 }}
             >
               Cómo llegar
             </a>
             <a
-              className="btn btn-secondary"
+              className="pildora pildora-borde"
               href={contacto.telefonoEnlace}
-              style={{ padding: "12px 22px", fontSize: 15 }}
+              style={{ height: 52, padding: "0 26px", fontSize: 16 }}
             >
               Llamar al {contacto.telefonoVisible}
             </a>
           </div>
         </div>
 
-        <figure className="w-full" style={{ margin: 0 }}>
-          {/* Mismo marco de 7px que tenía el placeholder de la foto, para que
-              el mapa se integre con el resto de las imágenes de la página. */}
-          <div
-            data-animar="aparecer"
-            style={{
-              aspectRatio: "16 / 9",
-              background: "var(--color-rosa-mapa)",
-              border: "7px solid var(--color-surface)",
-              outline: "1px solid var(--color-divider)",
-            }}
-          >
-            <iframe
-              src={contacto.mapaEmbebido}
-              title={`Ubicación del consultorio de la ${consultorio.nombre} en Google Maps`}
-              // Se carga solo cuando el visitante se acerca a esta sección: el
-              // iframe de Google pesa varios cientos de kilobytes y no debe
-              // competir con el hero por el ancho de banda inicial.
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              style={{ width: "100%", height: "100%", border: 0, display: "block" }}
-            />
-          </div>
-          <figcaption
-            style={{
-              fontSize: 12.5,
-              marginTop: 12,
-              color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
-            }}
-          >
-            {consultorio.direccion.completa}
-          </figcaption>
-        </figure>
+        <div
+          data-animar="aparecer"
+          style={{
+            borderRadius: "var(--radius-tarjeta)",
+            overflow: "hidden",
+            background: "var(--color-rosa-pal)",
+            ["--retraso" as string]: "120ms",
+          }}
+        >
+          <iframe
+            title="Ubicación del consultorio en Google Maps"
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(consultorio.direccion.completa)}&z=16&output=embed`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            style={{ border: 0, width: "100%", height: "clamp(300px, 40vw, 460px)", display: "block" }}
+          />
+        </div>
       </div>
     </section>
   );
-}
-
-/** Celdas de la tabla de horarios. El domingo va atenuado por estar cerrado. */
-function celda(cerrado: boolean): React.CSSProperties {
-  return {
-    padding: "12px 0",
-    borderBottom: "1px solid var(--color-divider)",
-    color: cerrado
-      ? "color-mix(in srgb, var(--color-text) 62%, transparent)"
-      : undefined,
-  };
 }

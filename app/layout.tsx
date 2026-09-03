@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Lora } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import AnimarAlEntrar from "@/components/AnimarAlEntrar";
 import { datosEstructurados } from "@/lib/datos-negocio";
@@ -7,25 +7,18 @@ import { SITIO } from "@/lib/sitio";
 import "./globals.css";
 
 /**
- * Las dos fuentes del diseño. next/font las descarga en tiempo de build y las
+ * La única fuente del rediseño. next/font la descarga en tiempo de build y la
  * sirve desde nuestro propio dominio: el navegador no hace ninguna petición a
  * Google, lo que quita una conexión de la ruta crítica y evita el parpadeo de
  * texto sin estilo.
  *
- * `variable` expone cada fuente como custom property; globals.css las conecta
- * con --font-heading y --font-body, que son los nombres del sistema de diseño.
+ * Se cargan los cuatro pesos que usa el diseño y ninguno más: cada peso extra
+ * es un archivo que el visitante descarga.
  */
-const cormorantGaramond = Cormorant_Garamond({
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--fuente-titulo",
-  display: "swap",
-});
-
-const lora = Lora({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--fuente-cuerpo",
+  weight: ["300", "400", "500", "600"],
+  variable: "--fuente-outfit",
   display: "swap",
 });
 
@@ -65,9 +58,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  /* Color de la barra del navegador en móvil: el mismo rosa del fondo, para
+  /* Color de la barra del navegador en móvil: el negro del hero, para
      que la interfaz del celular se funda con la página. */
-  themeColor: "#fdf8f8",
+  themeColor: "#0d0c0b",
 };
 
 export default function RootLayout({
@@ -76,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="es-MX"
-      className={`${cormorantGaramond.variable} ${lora.variable}`}
+      className={`${outfit.variable}`}
     >
       <head>
         {/* Ficha del consultorio para Google. Va en el <head> como script de

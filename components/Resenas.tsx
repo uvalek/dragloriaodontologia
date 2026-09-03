@@ -1,201 +1,131 @@
-import Contador from "./Contador";
-import Estrellas from "./Estrellas";
-import { calificacion, contacto, resenas } from "@/lib/contenido";
+import { calificacion, resenas } from "@/lib/contenido";
+
+function Estrella({ llena }: { llena: boolean }) {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill={llena ? "var(--color-estrella)" : "rgba(255,255,255,0.3)"} aria-hidden="true">
+      <path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2Z" />
+    </svg>
+  );
+}
 
 /**
- * Prueba social: la calificación de Google en grande y tres reseñas reales.
+ * Reseñas reales de Google, con la calificación en medio.
  *
- * Las reseñas son textuales del perfil de Google del consultorio; se enlaza al
- * perfil para que cualquiera pueda comprobarlas, que es justo lo que las hace
- * creíbles.
- *
- * Fondo rosa un punto más saturado, para separar visualmente esta sección de
- * las de arriba y abajo.
+ * Es el único bloque oscuro del cuerpo de la página, y eso es deliberado: la
+ * prueba social es lo que convence a un paciente nuevo, así que se separa del
+ * resto en vez de fundirse con las secciones blancas de arriba y abajo.
  */
 export default function Resenas() {
+  const enteras = Math.floor(calificacion.promedio);
+
   return (
     <section
       id="resenas"
-      className="border-t border-b"
       style={{
-        background: "var(--color-rosa-suave)",
-        borderColor: "var(--color-divider)",
+        background: "var(--color-text)",
+        color: "#fff",
+        padding: "clamp(44px, 5.4vw, 84px) var(--lateral)",
       }}
     >
-      <div
-        className="contenedor"
-        style={{ paddingBlock: "clamp(56px, 7vw, 104px)" }}
-      >
-        {/* Cabecera: título a la izquierda, calificación a la derecha.
-            `items-end` alinea ambos por la base, no por el centro. */}
+      <div className="contenedor">
+        <h2 data-animar style={{ fontSize: "clamp(38px, 5vw, 72px)", marginBottom: "clamp(26px, 3vw, 44px)" }}>
+          Lo que dicen los pacientes
+        </h2>
+
         <div
-          className="grid items-end"
           style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "clamp(28px, 4vw, 64px)",
+            display: "grid",
+            gap: "clamp(12px, 1.6vw, 22px)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+            alignItems: "stretch",
           }}
         >
-          <div>
-            <span
-              data-animar="subir"
-              className="block uppercase"
-              style={{
-                fontSize: 12,
-                letterSpacing: "0.16em",
-                color: "var(--color-accent-700)",
-              }}
-            >
-              Lo que dicen los pacientes
-            </span>
-            <h2
-              data-animar="subir"
-              style={
-                {
-                  fontSize: "clamp(32px, 3.8vw, 46px)",
-                  lineHeight: 1.12,
-                  letterSpacing: "-0.008em",
-                  margin: "18px 0 0",
-                  maxWidth: "18ch",
-                  "--retraso": "90ms",
-                } as React.CSSProperties
-              }
-            >
-              Reseñas en Google
-            </h2>
-          </div>
+          <Cita texto={resenas[0].texto} autor={resenas[0].autor} retraso={0} />
 
           <div
-            data-animar="crecer"
-            className="flex items-end"
-            style={{ gap: 22 }}
-          >
-            <span
-              className="cifras block"
-              style={{
-                fontFamily: "var(--font-heading)",
-                fontSize: "clamp(72px, 9vw, 112px)",
-                // Interlineado por debajo de 1 para que el número se apoye
-                // sobre la línea base sin arrastrar espacio muerto arriba.
-                lineHeight: 0.86,
-                color: "var(--color-accent)",
-              }}
-            >
-              <Contador
-                valor={calificacion.promedio}
-                decimales={1}
-                ancho={3}
-                duracion={1600}
-              />
-            </span>
-            <span className="block" style={{ paddingBottom: 8 }}>
-              <Estrellas
-                id="estrellas-cabecera"
-                ancho={102}
-                alto={19}
-                style={{ display: "block" }}
-                animar
-              />
-              <span
-                className="cifras block"
-                style={{
-                  fontSize: 14,
-                  marginTop: 10,
-                  color: "color-mix(in srgb, var(--color-text) 70%, transparent)",
-                }}
-              >
-                {calificacion.total} reseñas · Google
-              </span>
-            </span>
-          </div>
-        </div>
-
-        {/* Las tres reseñas */}
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "clamp(20px, 2.5vw, 30px)",
-            marginTop: "clamp(38px, 4.5vw, 60px)",
-          }}
-        >
-          {resenas.map((resena, i) => (
-            <figure
-              key={resena.autor}
-              data-animar="subir"
-              className="flex flex-col"
-              style={
-                {
-                  margin: 0,
-                  background: "var(--color-bg)",
-                  border: "1px solid var(--color-divider)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "26px 24px",
-                  gap: 16,
-                  // Altura mínima pareja para que las tres tarjetas se vean como
-                  // una fila aunque los textos tengan largos distintos.
-                  minHeight: 200,
-                  "--retraso": `${i * 110}ms`,
-                } as React.CSSProperties
-              }
-            >
-              {/* Cinco estrellas llenas: las tres reseñas elegidas son de 5. */}
-              <Estrellas
-                id={`estrellas-${resena.autor.split(" ")[0].toLowerCase()}`}
-                ancho={66}
-                alto={13}
-                relleno={null}
-                animar
-              />
-              <blockquote
-                className="flex-1"
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-heading)",
-                  fontSize: 20,
-                  lineHeight: 1.4,
-                }}
-              >
-                “{resena.texto}”
-              </blockquote>
-              <figcaption
-                className="uppercase"
-                style={{
-                  fontSize: 12.5,
-                  letterSpacing: "0.06em",
-                  color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
-                  margin: 0,
-                }}
-              >
-                {resena.autor}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-
-        <div
-          className="flex flex-wrap items-center"
-          style={{ gap: 18, marginTop: "clamp(30px, 3.5vw, 44px)" }}
-        >
-          <a
-            className="btn btn-primary"
-            href={contacto.mapa}
-            target="_blank"
-            rel="noopener"
-            style={{ padding: "12px 22px", fontSize: 15 }}
-          >
-            Ver las reseñas en Google
-          </a>
-          <span
+            data-animar
             style={{
-              fontSize: 13.5,
-              color: "color-mix(in srgb, var(--color-text) 62%, transparent)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 10,
+              textAlign: "center",
+              padding: "clamp(20px, 2.4vw, 32px)",
+              ["--retraso" as string]: "80ms",
             }}
           >
-            Calificación promedio de {calificacion.total} pacientes verificados
-            por Google.
-          </span>
+            <div style={{ fontSize: "clamp(56px, 7vw, 96px)", fontWeight: 600, lineHeight: 1, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums" }}>
+              {calificacion.promedio.toFixed(1)}
+            </div>
+            <div style={{ display: "flex", gap: 3 }} aria-hidden="true">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <Estrella key={i} llena={i < enteras} />
+              ))}
+            </div>
+            <p style={{ margin: 0, fontSize: 17, lineHeight: 1.4, color: "rgba(255,255,255,0.78)" }}>
+              {calificacion.total} reseñas
+              <br />
+              en Google
+            </p>
+            <a
+              href={calificacion.enlace}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pildora"
+              style={{
+                marginTop: 8,
+                height: 46,
+                padding: "0 22px",
+                border: "1px solid rgba(255,255,255,0.45)",
+                color: "#fff",
+                fontSize: 16,
+              }}
+            >
+              Ver las reseñas en Google
+            </a>
+          </div>
+
+          <Cita texto={resenas[1].texto} autor={resenas[1].autor} retraso={160} />
         </div>
+
+        {resenas[2] && (
+          <div style={{ marginTop: "clamp(12px, 1.6vw, 22px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "clamp(12px, 1.6vw, 22px)" }}>
+            <Cita texto={resenas[2].texto} autor={resenas[2].autor} retraso={0} />
+          </div>
+        )}
+
+        <p data-animar style={{ margin: "clamp(20px, 2.4vw, 32px) 0 0", fontSize: 15, color: "rgba(255,255,255,0.66)" }}>
+          Calificación promedio de {calificacion.total} pacientes verificados por Google.
+        </p>
       </div>
     </section>
+  );
+}
+
+function Cita({ texto, autor, retraso }: { texto: string; autor: string; retraso: number }) {
+  return (
+    <figure
+      data-animar
+      style={{
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        gap: 20,
+        background: "rgba(255,255,255,0.06)",
+        border: "1px solid rgba(255,255,255,0.14)",
+        borderRadius: "var(--radius-tarjeta)",
+        padding: "clamp(20px, 2.4vw, 32px)",
+        ["--retraso" as string]: `${retraso}ms`,
+      }}
+    >
+      <blockquote style={{ margin: 0, fontSize: "clamp(17px, 1.5vw, 21px)", lineHeight: 1.45, letterSpacing: "-0.01em" }}>
+        {texto}
+      </blockquote>
+      <figcaption style={{ fontSize: 13, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.72)" }}>
+        {autor}
+      </figcaption>
+    </figure>
   );
 }

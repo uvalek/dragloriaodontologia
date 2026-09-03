@@ -1,88 +1,41 @@
 import { porQue } from "@/lib/contenido";
 
 /**
- * Los cuatro motivos para elegir el consultorio.
+ * Las cuatro razones por las que un paciente repite.
  *
- * Cada uno se marca con una línea dorada arriba en lugar de encerrarlo en una
- * tarjeta: es más ligero visualmente y deja que los cuatro se lean como una
- * sola idea en vez de como cuatro cajas sueltas.
+ * Van después de las reseñas a propósito: primero lo dicen los pacientes, y
+ * solo entonces lo explica el consultorio.
  */
 export default function PorQue() {
   return (
     <section
-      id="por-que"
-      className="contenedor"
-      style={{ paddingBlock: "clamp(56px, 7vw, 104px)" }}
+      style={{
+        background: "var(--color-bg)",
+        color: "var(--color-text)",
+        padding: "clamp(44px, 5.4vw, 80px) var(--lateral)",
+      }}
     >
-      <span
-        data-animar="subir"
-        className="block uppercase"
-        style={{
-          fontSize: 12,
-          letterSpacing: "0.16em",
-          color: "var(--color-accent-700)",
-        }}
-      >
-        {porQue.kicker}
-      </span>
+      <div className="contenedor">
+        <h2 data-animar style={{ fontSize: "clamp(38px, 5vw, 72px)", maxWidth: "24ch", marginBottom: "clamp(26px, 3vw, 44px)" }}>
+          {porQue.titulo}
+        </h2>
 
-      <h2
-        data-animar="subir"
-        style={
-          {
-            fontSize: "clamp(32px, 3.8vw, 46px)",
-            lineHeight: 1.12,
-            letterSpacing: "-0.008em",
-            margin: "18px 0 0",
-            maxWidth: "22ch",
-            "--retraso": "90ms",
-          } as React.CSSProperties
-        }
-      >
-        {porQue.titulo}
-      </h2>
-
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: "clamp(26px, 3vw, 48px)",
-          marginTop: "clamp(36px, 4vw, 56px)",
-        }}
-      >
-        {porQue.motivos.map((motivo, i) => (
-          <div
-            key={motivo.titulo}
-            data-animar="subir"
-            style={
-              {
-                borderTop: "1px solid var(--color-accent)",
-                paddingTop: 20,
-                "--retraso": `${i * 90}ms`,
-              } as React.CSSProperties
-            }
-          >
-            <h3
-              style={{
-                fontSize: 22,
-                lineHeight: 1.25,
-                margin: 0,
-              }}
-            >
-              {motivo.titulo}
-            </h3>
-            <p
-              style={{
-                fontSize: 15,
-                lineHeight: 1.7,
-                margin: "12px 0 0",
-                color: "color-mix(in srgb, var(--color-text) 78%, transparent)",
-              }}
-            >
-              {motivo.texto}
-            </p>
-          </div>
-        ))}
+        <div
+          style={{
+            display: "grid",
+            gap: "clamp(16px, 2vw, 30px)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+          }}
+        >
+          {porQue.motivos.map((p, i) => (
+            <div key={p.titulo} data-animar style={{ ["--retraso" as string]: `${i * 70}ms` }}>
+              <h3 style={{ margin: "0 0 10px", fontSize: "clamp(21px, 1.9vw, 26px)", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+                {p.titulo}
+              </h3>
+              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.55, color: "var(--color-suave)" }}>{p.texto}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

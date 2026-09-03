@@ -47,6 +47,9 @@ export const consultorio = {
       "Av. Lerdo de Tejada 12, Centro, Segunda Secc, 90740 Zacatelco, Tlaxcala",
   },
   coordenadas: { latitud: 19.2157807, longitud: -98.241731 },
+  /** Abre la ficha del consultorio en Google Maps, con la ruta ya lista. */
+  enlaceMapa:
+    "https://www.google.com/maps/search/?api=1&query=Av.+Lerdo+de+Tejada+12,+Centro,+Segunda+Secc,+90740+Zacatelco,+Tlaxcala",
 } as const;
 
 export const horarios = [
@@ -65,8 +68,9 @@ export const horarioResumen = "Lunes a viernes 9:00–20:00 · Sábado 9:00–14
 export const calificacion = {
   promedio: 4.6,
   total: 20,
-  /** Porcentaje de la quinta estrella que se pinta (4.6 → 60% de la última). */
-  rellenoUltimaEstrella: "60%",
+  /** Ficha del consultorio en Google, para que cualquiera compruebe la nota. */
+  enlace:
+    "https://www.google.com/maps/search/?api=1&query=Dra.+Gloria+Portillo+Atempa+Zacatelco",
 } as const;
 
 /**
@@ -81,13 +85,13 @@ export const resenas = [
   },
   {
     texto:
-      "Muy profesional, muy amable, hace muchos años que nos atiende a mí y a mis hijos, sus trabajos son muy buenos y de calidad, es muy recomendable.",
-    autor: "Nereyda Flores Hervert",
+      "Excelente dentista, trabajos muy bien hechos. Súper amable, da mucha confianza al ir con ella. Todo impecable, se nota el profesionalismo.",
+    autor: "Lorena Nava",
   },
   {
     texto:
-      "Excelente dentista, trabajos muy bien hechos. Súper amable, da mucha confianza al ir con ella. Todo impecable, se nota el profesionalismo.",
-    autor: "Lorena Nava",
+      "Muy profesional, muy amable, hace muchos años que nos atiende a mí y a mis hijos, sus trabajos son muy buenos y de calidad, es muy recomendable.",
+    autor: "Nereyda Flores Hervert",
   },
 ] as const;
 
@@ -96,17 +100,28 @@ export const resenas = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const hero = {
-  kicker: "Consultorio dental · Zacatelco, Tlaxcala",
-  tituloLinea1: "Dra. Gloria",
-  tituloLinea2: "Portillo Atempa",
-  subtitulo: "Su dentista de confianza, a unas cuadras de casa.",
-  parrafo:
-    "25 años cuidando la salud bucal de Zacatelco. Odontología general para toda la familia, con explicaciones claras y sin prisas.",
+  /** Rótulo flotante sobre el video. */
+  destacado: "Carillas Dentales de Porcelana",
+  /** Las tres líneas del titular. Se parten a mano: el diseño las escalona. */
+  titulo: ["Odontología", "Estética & Salud", "Dental Integral"],
+  /** Iniciales de los pacientes que dejaron las reseñas visibles. */
+  avatares: [
+    { iniciales: "MR", degradado: "linear-gradient(150deg, #c98d6b, #8d5136)" },
+    { iniciales: "JL", degradado: "linear-gradient(150deg, #6f8ea8, #3d566b)" },
+    { iniciales: "AC", degradado: "linear-gradient(150deg, #d8b25e, #9a7522)" },
+  ],
   imagen: {
     src: "/img/dra-gloria-recepcion.webp",
     alt: "Dra. Gloria Portillo Atempa en la recepción de su consultorio",
   },
 } as const;
+
+/** Enlaces del menú superior. */
+export const navegacion = [
+  { texto: "Tratamientos", ancla: "#tratamientos" },
+  { texto: "Reseñas", ancla: "#resenas" },
+  { texto: "Ubicación", ancla: "#ubicacion" },
+] as const;
 
 export const barraDatos = {
   experiencia: { cifra: "25", texto: "años de experiencia en odontología general" },
@@ -129,49 +144,58 @@ export const sobreLaDoctora = {
   },
 } as const;
 
-/** Identificador del icono que dibuja cada tarjeta (ver components/IconoServicio). */
-export type IconoServicio =
-  | "destello"
-  | "capas"
-  | "escudo"
-  | "pulso"
-  | "puente"
-  | "sonrisa";
-
 export const servicios: ReadonlyArray<{
-  icono: IconoServicio;
   titulo: string;
   descripcion: string;
+  /** Foto de la tarjeta. `null` = todavía sin foto: la tarjeta usa un fondo liso. */
+  imagen: { src: string; alt: string } | null;
 }> = [
   {
-    icono: "destello",
     titulo: "Limpieza dental",
     descripcion: "Remoción de sarro y pulido para mantener las encías sanas.",
+    imagen: {
+      src: "/img/tratamientos/limpieza.webp",
+      alt: "Paciente durante una limpieza dental en el consultorio",
+    },
   },
   {
-    icono: "capas",
     titulo: "Resinas y empastes",
     descripcion: "Restauración de caries con material del color del diente.",
+    imagen: {
+      src: "/img/tratamientos/resinas.webp",
+      alt: "Trabajo de precisión sobre un molde dental",
+    },
   },
   {
-    icono: "escudo",
     titulo: "Extracciones",
     descripcion: "Con anestesia local, indicaciones claras y revisión posterior.",
+    imagen: {
+      src: "/img/tratamientos/extracciones.webp",
+      alt: "Procedimiento dental con instrumental esterilizado",
+    },
   },
   {
-    icono: "pulso",
     titulo: "Endodoncia",
     descripcion: "Tratamiento de conducto para conservar la pieza natural.",
+    imagen: {
+      src: "/img/tratamientos/endodoncia.webp",
+      alt: "Material de restauración dental ordenado sobre una superficie",
+    },
   },
   {
-    icono: "puente",
+    // El diseño dejó este hueco sin foto. La tarjeta funciona igual, con el
+    // fondo rosa liso; en cuanto haya una imagen se llena aquí.
     titulo: "Prótesis y placas",
     descripcion: "Prótesis fijas y removibles ajustadas a su mordida.",
+    imagen: null,
   },
   {
-    icono: "sonrisa",
     titulo: "Odontopediatría",
     descripcion: "Atención para los más pequeños, sin prisas y con paciencia.",
+    imagen: {
+      src: "/img/tratamientos/odontopediatria.webp",
+      alt: "Dos niñas jugando a la consulta dental",
+    },
   },
 ];
 
