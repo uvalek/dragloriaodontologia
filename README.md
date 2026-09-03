@@ -147,6 +147,45 @@ Reglas que conviene no romper:
 - Las fuentes se auto-hospedan con `next/font`; no se piden a Google.
 - El mapa es un iframe con `loading="lazy"` y no necesita clave de API.
 
+## Dos ramas: `main` y `rediseno`
+
+El sitio en vivo sale **solo** de `main`. Los cambios en curso se trabajan en
+`rediseno`, que tiene su propia dirección para revisarlos sin tocar lo que ve
+el paciente.
+
+| Rama | Dirección | Qué es |
+|---|---|---|
+| `main` | `dragloriaportillo.vercel.app` | el sitio real, el que se comparte |
+| `rediseno` | `dragloriaportillo-git-rediseno-aleks-projects-2fe2ebd7.vercel.app` | el borrador |
+
+La dirección de `rediseno` es fija: siempre muestra el último commit de esa
+rama, así que se puede mandar una vez y volver a abrirla tras cada cambio.
+
+Vercel crea el borrador solo, con cada `git push` a `rediseno`. Tarda entre uno
+y dos minutos.
+
+### Aprobar los cambios
+
+Cuando el borrador ya guste, se pasa a `main`:
+
+```bash
+git checkout main && git merge rediseno && git push origin main
+```
+
+Eso publica en la dirección real. Después se puede seguir usando la misma rama
+para la siguiente tanda de cambios.
+
+### Detalles que conviene saber
+
+- **Un `push` sin commits nuevos no genera borrador.** Vercel identifica los
+  despliegues por commit: si la rama apunta a uno que ya publicó, lo reutiliza y
+  no crea dirección nueva. Hace falta al menos un commit propio en la rama.
+- **La etiqueta canónica del borrador apunta a producción**, porque sale de
+  `VERCEL_PROJECT_PRODUCTION_URL`. Es lo correcto: evita que Google indexe el
+  borrador como si fuera una página aparte y le reste posiciones a la real.
+- **Las visitas al borrador no se separan en Analytics.** Si hay que medir algo
+  de verdad, se mide en producción.
+
 ## Despliegue en Vercel
 
 El proyecto está en la raíz del repositorio, así que Vercel lo detecta solo. Al
