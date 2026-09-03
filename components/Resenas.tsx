@@ -42,8 +42,12 @@ export default function Resenas() {
         >
           <Cita texto={resenas[0].texto} autor={resenas[0].autor} retraso={0} />
 
+          {/* En móvil este bloque sube al principio (ver .calificacion-bloque):
+              la nota de Google encabeza la sección en vez de quedar escondida
+              entre dos reseñas. */}
           <div
             data-animar
+            className="calificacion-bloque"
             style={{
               display: "flex",
               flexDirection: "column",

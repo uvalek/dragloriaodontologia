@@ -173,9 +173,14 @@ export default function Hero() {
           color: "#fff",
         }}
       >
+        {/* En móvil los avatares y la nota suben por encima de "Odontología"
+            (ver .hero-fila): apilado en una columna, la prueba social es lo
+            primero que conviene que se vea. En el HTML el <h1> sigue yendo
+            antes, que es lo correcto para un lector de pantalla. */}
         <div
           data-entrada
-          style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(12px, 2.4vw, 34px)", ["--retraso" as string]: "80ms" }}
+          className="hero-fila"
+          style={{ display: "flex", flexWrap: "wrap", gap: "clamp(12px, 2.4vw, 34px)", ["--retraso" as string]: "80ms" }}
         >
           <h1 className="titular-hero">{hero.titulo[0]}</h1>
 

@@ -229,3 +229,38 @@
     padding-left: clamp(0px, calc((100vw - 430px) * 0.22), 18%);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REORDENADOS SOLO EN MÓVIL
+
+   En pantalla ancha el orden del HTML y el visual coinciden. En estrecho, dos
+   bloques suben: la prueba social gana peso cuando todo se apila en una
+   columna y el visitante ve una sola cosa a la vez.
+
+   Se hace con `order` / `column-reverse` y no cambiando el HTML porque el
+   orden del documento tiene que seguir siendo el correcto para quien navega
+   con lector de pantalla o teclado: el <h1> antes que su adorno, y la reseña
+   antes que el resumen de la nota.
+   ══════════════════════════════════════════════════════════════════════════ */
+@layer utilities {
+  /* Hero: los avatares y la nota se colocan encima de "Odontología". */
+  .hero-fila {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  /* Reseñas: el bloque de la calificación sube al principio de la columna. */
+  .calificacion-bloque {
+    order: -1;
+  }
+
+  @media (min-width: 860px) {
+    .hero-fila {
+      flex-direction: row;
+      align-items: center;
+    }
+    .calificacion-bloque {
+      order: 0;
+    }
+  }
+}
