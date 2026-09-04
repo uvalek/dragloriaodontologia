@@ -28,7 +28,7 @@ export default function PieDePagina() {
           color: "var(--color-suave)",
         }}
       >
-        <div>
+        <div data-animar>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span
               aria-hidden="true"
@@ -57,9 +57,9 @@ export default function PieDePagina() {
           </p>
         </div>
 
-        <p style={{ margin: 0 }}>{consultorio.direccion.completa}</p>
+        <p data-animar style={{ margin: 0, ["--retraso" as string]: "80ms" }}>{consultorio.direccion.completa}</p>
 
-        <p style={{ margin: 0 }}>
+        <p data-animar style={{ margin: 0, ["--retraso" as string]: "160ms" }}>
           Lunes a viernes 9:00–20:00
           <br />
           Sábado 9:00–14:00
@@ -67,7 +67,7 @@ export default function PieDePagina() {
           Domingo cerrado
         </p>
 
-        <p style={{ margin: 0, display: "flex", flexDirection: "column", gap: 4 }}>
+        <p data-animar style={{ margin: 0, display: "flex", flexDirection: "column", gap: 4, ["--retraso" as string]: "240ms" }}>
           <a href={contacto.telefonoEnlace} style={{ color: "var(--color-acento)" }}>
             {contacto.telefonoInternacional}
           </a>

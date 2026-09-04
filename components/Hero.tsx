@@ -1,3 +1,4 @@
+import Contador from "./Contador";
 import EnlaceWhatsApp from "./EnlaceWhatsApp";
 import MenuMovil from "./MenuMovil";
 import { calificacion, hero, navegacion } from "@/lib/contenido";
@@ -41,20 +42,25 @@ export default function Hero() {
         background: "var(--color-negro-hero)",
       }}
     >
-      <video
-        data-entrada="escala"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="metadata"
-        poster="/video/hero-poster.webp"
-        aria-hidden="true"
-        tabIndex={-1}
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-      >
-        <source src="/video/hero.mp4" type="video/mp4" />
-      </video>
+      {/* Dos capas, no una: el contenedor hace la entrada (una vez) y el video
+          la deriva lenta (en bucle). Si las dos animaciones cayeran sobre el
+          mismo elemento, ambas mueven `transform` y la segunda pisaría a la
+          primera. */}
+      <div data-entrada="escala" style={{ position: "absolute", inset: 0 }} aria-hidden="true">
+        <video
+          className="video-hero"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/video/hero-poster.webp"
+          tabIndex={-1}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       {/* Degradado que oscurece arriba y abajo. Es lo que sostiene el contraste
           del texto blanco: el video cambia de brillo constantemente y sin esta
@@ -182,7 +188,7 @@ export default function Hero() {
           className="hero-fila"
           style={{ display: "flex", flexWrap: "wrap", gap: "clamp(12px, 2.4vw, 34px)", ["--retraso" as string]: "80ms" }}
         >
-          <h1 className="titular-hero">{hero.titulo[0]}</h1>
+          <h1 className="titular-hero linea-recorte" data-entrada><span>{hero.titulo[0]}</span></h1>
 
           <div style={{ display: "flex", alignItems: "center", gap: "clamp(10px, 1.2vw, 16px)", marginTop: 4 }}>
             <div style={{ display: "flex" }} aria-hidden="true">
@@ -210,7 +216,11 @@ export default function Hero() {
               ))}
             </div>
             <a href="#resenas" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <span style={{ fontSize: "clamp(20px, 2vw, 27px)", fontVariantNumeric: "tabular-nums" }}>{calificacion.total}</span>
+              <Contador
+                valor={calificacion.total}
+                ancho={2}
+                style={{ fontSize: "clamp(20px, 2vw, 27px)" }}
+              />
               <span style={{ display: "flex", alignItems: "center", gap: "clamp(6px, 0.8vw, 10px)" }}>
                 <span style={{ display: "flex", gap: 3 }} aria-hidden="true">
                   {[0, 1, 2, 3, 4].map((i) => (
@@ -223,13 +233,13 @@ export default function Hero() {
           </div>
         </div>
 
-        <h2 className="titular-hero titular-sangrado" data-entrada style={{ ["--retraso" as string]: "140ms" }}>
-          {hero.titulo[1]}
+        <h2 className="titular-hero titular-sangrado linea-recorte" data-entrada style={{ ["--retraso" as string]: "140ms" }}>
+          <span>{hero.titulo[1]}</span>
         </h2>
 
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(14px, 2vw, 40px)" }}>
-          <h2 className="titular-hero" data-entrada style={{ ["--retraso" as string]: "200ms" }}>
-            {hero.titulo[2]}
+          <h2 className="titular-hero linea-recorte" data-entrada style={{ ["--retraso" as string]: "200ms" }}>
+            <span>{hero.titulo[2]}</span>
           </h2>
 
           {/* En el diseño este botón apuntaba a #agendar, un ancla que no existe

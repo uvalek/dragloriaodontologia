@@ -26,7 +26,7 @@ export default function Tratamientos() {
           <span style={{ fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-kicker)" }}>
             Tratamientos
           </span>
-          <h2 style={{ fontSize: "clamp(34px, 4.4vw, 62px)", maxWidth: "22ch" }}>
+          <h2 className="subrayado" data-animar style={{ fontSize: "clamp(34px, 4.4vw, 62px)", maxWidth: "22ch", ["--retraso" as string]: "80ms" }}>
             Lo que se atiende en el consultorio
           </h2>
         </div>
@@ -44,7 +44,7 @@ export default function Tratamientos() {
               <article
                 key={s.titulo}
                 className="tarjeta-trat"
-                data-animar
+                data-animar="zoom"
                 style={{
                   background: destacada ? "var(--color-text)" : "var(--color-rosa-pal)",
                   color: destacada ? "#fff" : "var(--color-text)",

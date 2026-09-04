@@ -16,7 +16,7 @@ export default function PorQue() {
       }}
     >
       <div className="contenedor">
-        <h2 data-animar style={{ fontSize: "clamp(38px, 5vw, 72px)", maxWidth: "24ch", marginBottom: "clamp(26px, 3vw, 44px)" }}>
+        <h2 className="subrayado" data-animar style={{ fontSize: "clamp(38px, 5vw, 72px)", maxWidth: "24ch", marginBottom: "clamp(26px, 3vw, 44px)" }}>
           {porQue.titulo}
         </h2>
 
@@ -28,7 +28,7 @@ export default function PorQue() {
           }}
         >
           {porQue.motivos.map((p, i) => (
-            <div key={p.titulo} data-animar style={{ ["--retraso" as string]: `${i * 70}ms` }}>
+            <div key={p.titulo} data-animar="lateral" style={{ ["--retraso" as string]: `${i * 90}ms` }}>
               <h3 style={{ margin: "0 0 10px", fontSize: "clamp(21px, 1.9vw, 26px)", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
                 {p.titulo}
               </h3>

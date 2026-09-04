@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Contador from "./Contador";
 import { barraDatos, hero, sobreLaDoctora } from "@/lib/contenido";
 
 /**
@@ -26,33 +27,36 @@ export default function Intro() {
           alignItems: "stretch",
         }}
       >
-        <div data-animar style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 1.6vw, 22px)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(14px, 1.6vw, 22px)" }}>
           <h2 style={{ fontSize: "clamp(40px, 5.6vw, 88px)", lineHeight: 0.94, letterSpacing: "-0.035em" }}>
-            Dra. Gloria
-            <br />
-            Portillo Atempa
+            <span className="linea-recorte" data-animar>
+              <span>Dra. Gloria</span>
+            </span>
+            <span className="linea-recorte" data-animar style={{ ["--retraso" as string]: "90ms" }}>
+              <span>Portillo Atempa</span>
+            </span>
           </h2>
 
-          <p style={{ margin: 0, fontSize: "clamp(19px, 1.9vw, 26px)", fontWeight: 500, lineHeight: 1.3, letterSpacing: "-0.01em" }}>
+          <p data-animar style={{ margin: 0, fontSize: "clamp(19px, 1.9vw, 26px)", fontWeight: 500, lineHeight: 1.3, letterSpacing: "-0.01em", ["--retraso" as string]: "160ms" }}>
             Su dentista de confianza, a unas cuadras de casa.
           </p>
 
-          <p style={{ margin: 0, fontSize: "clamp(16px, 1.4vw, 19px)", lineHeight: 1.55, color: "var(--color-suave)", maxWidth: "52ch" }}>
+          <p data-animar style={{ margin: 0, fontSize: "clamp(16px, 1.4vw, 19px)", lineHeight: 1.55, color: "var(--color-suave)", maxWidth: "52ch", ["--retraso" as string]: "220ms" }}>
             25 años cuidando la salud bucal de Zacatelco. Odontología general para toda la familia, con explicaciones claras y sin prisas.
           </p>
 
-          {sobreLaDoctora.parrafos.map((p) => (
-            <p key={p.slice(0, 24)} style={{ margin: 0, fontSize: "clamp(16px, 1.35vw, 19px)", lineHeight: 1.6, color: "var(--color-suave)", maxWidth: "56ch" }}>
+          {sobreLaDoctora.parrafos.map((p, i) => (
+            <p key={p.slice(0, 24)} data-animar style={{ ["--retraso" as string]: `${280 + i * 60}ms`, margin: 0, fontSize: "clamp(16px, 1.35vw, 19px)", lineHeight: 1.6, color: "var(--color-suave)", maxWidth: "56ch" }}>
               {p}
             </p>
           ))}
 
-          <p style={{ margin: 0, fontSize: "clamp(16px, 1.35vw, 19px)", lineHeight: 1.6, color: "var(--color-suave)" }}>
+          <p data-animar style={{ margin: 0, fontSize: "clamp(16px, 1.35vw, 19px)", lineHeight: 1.6, color: "var(--color-suave)", ["--retraso" as string]: "420ms" }}>
             {sobreLaDoctora.credencial}
           </p>
         </div>
 
-        <figure data-animar="aparecer" style={{ display: "flex", ["--retraso" as string]: "120ms" }}>
+        <figure data-animar="aparecer" className="foto-zoom" style={{ display: "flex", ["--retraso" as string]: "120ms" }}>
           <div
             style={{
               position: "relative",
@@ -76,7 +80,6 @@ export default function Intro() {
 
       <div
         className="contenedor"
-        data-animar
         style={{
           marginTop: "clamp(28px, 3.4vw, 48px)",
           display: "grid",
@@ -85,9 +88,9 @@ export default function Intro() {
           ["--retraso" as string]: "200ms",
         }}
       >
-        <Dato cifra="25" texto={barraDatos.experiencia.texto} />
-        <Dato cifra={barraDatos.cedula.cifra} texto={barraDatos.cedula.texto} />
-        <Dato cifra="Lun a Sáb" texto={barraDatos.horario.texto} />
+        <Dato cifra={<Contador valor={25} ancho={2} />} texto={barraDatos.experiencia.texto} retraso={0} />
+        <Dato cifra={barraDatos.cedula.cifra} texto={barraDatos.cedula.texto} retraso={90} />
+        <Dato cifra="Lun a Sáb" texto={barraDatos.horario.texto} retraso={180} />
       </div>
     </section>
   );
@@ -101,14 +104,16 @@ export default function Intro() {
  * la tarjeta en cuanto cambiaba el ancho. Aquí las tres usan el mismo apilado
  * y se acomodan solas.
  */
-function Dato({ cifra, texto }: { cifra: string; texto: string }) {
+function Dato({ cifra, texto, retraso }: { cifra: React.ReactNode; texto: string; retraso: number }) {
   return (
     <div
+      data-animar="zoom"
       style={{
         background: "var(--color-rosa-pal)",
         borderRadius: "var(--radius-chip)",
         padding: "clamp(16px, 1.6vw, 22px)",
         minHeight: 112,
+        ["--retraso" as string]: `${retraso}ms`,
       }}
     >
       <div style={{ fontSize: "clamp(30px, 2.8vw, 40px)", fontWeight: 600, letterSpacing: "-0.03em", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>

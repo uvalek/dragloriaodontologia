@@ -1,3 +1,4 @@
+import Contador from "./Contador";
 import { calificacion, resenas } from "@/lib/contenido";
 
 function Estrella({ llena }: { llena: boolean }) {
@@ -29,7 +30,8 @@ export default function Resenas() {
     >
       <div className="contenedor">
         <h2 data-animar style={{ fontSize: "clamp(38px, 5vw, 72px)", marginBottom: "clamp(26px, 3vw, 44px)" }}>
-          Lo que dicen los pacientes
+          <span className="linea-recorte" data-animar><span>Lo que dicen</span></span>
+          <span className="linea-recorte" data-animar style={{ ["--retraso" as string]: "90ms" }}><span>los pacientes</span></span>
         </h2>
 
         <div
@@ -59,9 +61,12 @@ export default function Resenas() {
               ["--retraso" as string]: "80ms",
             }}
           >
-            <div style={{ fontSize: "clamp(56px, 7vw, 96px)", fontWeight: 600, lineHeight: 1, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums" }}>
-              {calificacion.promedio.toFixed(1)}
-            </div>
+            <Contador
+              valor={calificacion.promedio}
+              decimales={1}
+              ancho={3}
+              style={{ fontSize: "clamp(56px, 7vw, 96px)", fontWeight: 600, lineHeight: 1, letterSpacing: "-0.04em" }}
+            />
             <div style={{ display: "flex", gap: 3 }} aria-hidden="true">
               {[0, 1, 2, 3, 4].map((i) => (
                 <Estrella key={i} llena={i < enteras} />

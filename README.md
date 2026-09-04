@@ -126,10 +126,23 @@ Se controlan con un atributo en el HTML, no con código en cada componente:
 
 | Atributo | Efecto | Cuándo usarlo |
 |---|---|---|
-| `data-animar` | Sube y aparece al entrar en pantalla | Casi todo |
-| `data-animar="aparecer"` | Solo desvanecido, sin desplazarse | Fotos y el mapa |
+| `data-animar` | Sube y aparece | Casi todo |
+| `data-animar="aparecer"` | Solo desvanecido | Mapa y bloques que no deben moverse |
+| `data-animar="zoom"` | Entra creciendo desde el 94 % | Cifras y tarjetas |
+| `data-animar="zoom-out"` | Entra encogiendo desde el 106 % | Fotos que se asientan en su marco |
+| `data-animar="lateral"` | Entra desde la izquierda | Filas de horario, listas |
 | `data-entrada` | Anima al cargar, sin esperar al JavaScript | Solo el hero |
 | `data-entrada="escala"` | Solo escala, nunca opacidad | El video del hero |
+
+Además hay tres clases:
+
+| Clase | Efecto |
+|---|---|
+| `.linea-recorte` | El texto sube desde detrás de un recorte, línea por línea |
+| `.subrayado` | Una línea rosa se dibuja de izquierda a derecha bajo el título |
+| `.foto-zoom` | La foto se acerca despacio al entrar |
+
+Y `<Contador>` para los números que suben (25, 4.6, 20).
 
 `--retraso` escalona los elementos de una misma fila.
 
@@ -147,6 +160,19 @@ Reglas que conviene no romper:
   pantalla produce mareo.
 - Sin JavaScript la página se ve completa igual, gracias a la regla dentro de
   `<noscript>` en `app/layout.tsx`.
+- **Los contadores no inventan el número.** El valor final se genera en el
+  servidor y está en el HTML desde el primer momento; la animación solo lo
+  sustituye mientras dura. Google lee "25", no "0". Y el hueco se reserva de
+  antemano con `minWidth` en `ch`, porque al pasar de "0" a "25" el texto
+  cambia de ancho y empujaría lo que tiene al lado.
+- **La cédula profesional no cuenta.** Es un folio, no una cantidad: verlo
+  correr hacia 2 740 104 sugiere una cifra que no significa nada.
+- **El video del hero lleva dos capas.** El contenedor hace la entrada, una
+  vez; el video hace la deriva lenta, en bucle. Las dos animaciones mueven
+  `transform`, y sobre el mismo elemento la segunda pisaría a la primera.
+- **El recorte de línea necesita aire.** `.linea-recorte` lleva un
+  `padding-bottom` compensado con margen negativo: las tildes y la cola de la
+  "g" se salen de la caja del texto, y sin ese margen el recorte las decapita.
 
 ## Notas técnicas
 

@@ -26,10 +26,12 @@ export default function Ubicacion() {
           alignItems: "start",
         }}
       >
-        <div data-animar style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2vw, 26px)" }}>
-          <h2 style={{ fontSize: "clamp(38px, 4.6vw, 66px)" }}>Dónde y cuándo</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(16px, 2vw, 26px)" }}>
+          <h2 className="subrayado" data-animar style={{ fontSize: "clamp(38px, 4.6vw, 66px)" }}>
+            Dónde y cuándo
+          </h2>
 
-          <p style={{ margin: 0, fontSize: "clamp(17px, 1.5vw, 21px)", lineHeight: 1.45, color: "var(--color-suave)" }}>
+          <p data-animar style={{ margin: 0, fontSize: "clamp(17px, 1.5vw, 21px)", lineHeight: 1.45, color: "var(--color-suave)", ["--retraso" as string]: "100ms" }}>
             {consultorio.direccion.calle}, {consultorio.direccion.colonia},
             <br />
             {consultorio.direccion.codigoPostal}
@@ -38,10 +40,12 @@ export default function Ubicacion() {
           </p>
 
           <div>
-            {horarios.map((h) => (
+            {horarios.map((h, i) => (
               <div
                 key={h.dias}
+                data-animar="lateral"
                 style={{
+                  ["--retraso" as string]: `${i * 80}ms`,
                   display: "flex",
                   justifyContent: "space-between",
                   gap: 16,
@@ -57,7 +61,7 @@ export default function Ubicacion() {
             ))}
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <div data-animar style={{ display: "flex", flexWrap: "wrap", gap: 12, ["--retraso" as string]: "300ms" }}>
             <a
               className="pildora pildora-rosa"
               href={consultorio.enlaceMapa}
