@@ -1,6 +1,7 @@
 import Contador from "./Contador";
 import EnlaceWhatsApp from "./EnlaceWhatsApp";
 import MenuMovil from "./MenuMovil";
+import VideoHero from "./VideoHero";
 import { calificacion, hero, navegacion } from "@/lib/contenido";
 
 /** Estrella maciza. El mismo trazo en el hero y en las reseñas. */
@@ -16,19 +17,7 @@ function Estrella({ lado, color }: { lado: number; color: string }) {
  * Primera pantalla: video a sangre, titular a tres líneas y el botón de
  * WhatsApp.
  *
- * Sobre el video:
- *
- * · Va `muted` + `playsInline`, que es lo único que permite a iOS y Android
- *   reproducirlo solo. Sin `playsInline`, Safari en iPhone lo abre a pantalla
- *   completa en cuanto arranca.
- * · Lleva `poster`: esa imagen es lo que se ve mientras el video llega, y es
- *   el elemento que Google cronometra como LCP. Sin póster, la primera
- *   pantalla sería un rectángulo negro durante la carga.
- * · `preload="metadata"` en vez de `auto`: el video acompaña, no informa. No
- *   tiene por qué competir con el resto de la página por el ancho de banda de
- *   un celular con datos móviles.
- * · Es decorativo, así que va `aria-hidden`: quien usa lector de pantalla no
- *   gana nada con que se lo anuncien.
+ * El fondo (los videos encadenados) vive en components/VideoHero.tsx.
  */
 export default function Hero() {
   return (
@@ -42,25 +31,7 @@ export default function Hero() {
         background: "var(--color-negro-hero)",
       }}
     >
-      {/* Dos capas, no una: el contenedor hace la entrada (una vez) y el video
-          la deriva lenta (en bucle). Si las dos animaciones cayeran sobre el
-          mismo elemento, ambas mueven `transform` y la segunda pisaría a la
-          primera. */}
-      <div data-entrada="escala" style={{ position: "absolute", inset: 0 }} aria-hidden="true">
-        <video
-          className="video-hero"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          poster="/video/hero-poster.webp"
-          tabIndex={-1}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        >
-          <source src="/video/hero.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <VideoHero />
 
       {/* Degradado que oscurece arriba y abajo. Es lo que sostiene el contraste
           del texto blanco: el video cambia de brillo constantemente y sin esta

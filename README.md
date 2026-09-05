@@ -20,7 +20,8 @@ Otros comandos:
 | `npm run build` | Compila para producción |
 | `npm start` | Sirve el build compilado |
 | `npm run lint` | Revisa el código |
-| `node scripts/optimizar-imagenes.mjs` | Reconvierte las fotos a WebP (solo si se cambian las originales) |
+| `node scripts/optimizar-imagenes.mjs` | Reconvierte la foto a WebP |
+| `node scripts/optimizar-videos.mjs` | Reconvierte los videos del hero (necesita ffmpeg) |
 
 ## Dónde tocar cada cosa
 
@@ -70,6 +71,32 @@ public/
   video/            Video del hero + su póster
 originales/         Archivos pesados sin optimizar (no se versiona)
 ```
+
+## Añadir o cambiar un video del hero
+
+1. Deja el archivo en `originales/` como `hero-1.mp4`, `hero-2.mp4`, etc. El
+   número es el orden en que se ven.
+2. Si agregas uno nuevo, añádelo a la lista `CLIPS` de
+   `scripts/optimizar-videos.mjs` **y** a la de `components/VideoHero.tsx`.
+3. Corre `node scripts/optimizar-videos.mjs` (necesita ffmpeg).
+
+Cómo está montado y qué conviene no romper:
+
+- **Solo el primer clip se descarga al abrir la página.** Los demás arrancan con
+  `preload="none"` y no se piden hasta que el clip anterior va por la mitad.
+  Sumados pesan 1 MB, y la mayoría de las visitas llegan por WhatsApp desde un
+  celular con datos: cargarlos todos de golpe sería cobrarle al visitante un
+  video que quizá no llegue a ver.
+- **Cada clip es un `<video>` propio, superpuesto.** Cambiar el `src` de uno
+  solo dejaría el hueco en negro mientras el navegador abre el archivo
+  siguiente.
+- **Sin JavaScript se ve el primer clip en bucle**, que es lo que había antes de
+  encadenarlos. El `loop` viene en el HTML y el componente se lo quita al tomar
+  el control.
+- **Con "reducir movimiento" no se reproduce nada**: se queda el póster fijo.
+- **Mira el contraste del titular** sobre el clip nuevo. El texto blanco se
+  apoya en un degradado oscuro; si el video es muy claro por abajo, el titular
+  deja de leerse. Los dos actuales dan 11:1 y 7.6:1, con el mínimo en 3:1.
 
 ## Cambiar una foto
 
@@ -184,9 +211,10 @@ Reglas que conviene no romper:
   `.solo-movil`, para el menú. El diseño original decidía eso con banderas de
   JavaScript; en CSS se resuelve antes de pintar y sin el salto que se ve
   cuando el layout cambia después de hidratar.
-- **El video del hero** pesa 406 KB (de 7.9 MB originales), va `muted` y
-  `playsInline` —lo único que permite a iOS reproducirlo solo— y lleva póster,
-  que es lo que se ve mientras llega.
+- **Los videos del hero** se encadenan: termina uno y entra el siguiente con un
+  fundido, y al final vuelve al primero (`components/VideoHero.tsx`). Van
+  `muted` y `playsInline` —lo único que permite a iOS reproducirlos solos— y el
+  primero lleva póster, que es lo que se ve mientras llega.
 - Las fuentes se auto-hospedan con `next/font`; no se piden a Google.
 - El mapa es un iframe con `loading="lazy"` y no necesita clave de API.
 
