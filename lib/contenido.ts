@@ -111,8 +111,8 @@ export const hero = {
     { iniciales: "AC", degradado: "linear-gradient(150deg, #d8b25e, #9a7522)" },
   ],
   imagen: {
-    src: "/img/dra-gloria-recepcion.webp",
-    alt: "Dra. Gloria Portillo Atempa en la recepción de su consultorio",
+    src: "/img/dra-gloria.webp",
+    alt: "La Dra. Gloria Portillo Atempa, sonriendo en su consultorio de Zacatelco",
   },
 } as const;
 
@@ -138,10 +138,6 @@ export const sobreLaDoctora = {
     "Su forma de trabajar es sencilla: revisar con calma, explicar lo que encuentra en palabras claras y proponer solo el tratamiento que hace falta. Antes de empezar, usted sabrá qué se va a hacer, cuánto tiempo toma y cuánto cuesta.",
   ],
   credencial: `${consultorio.titulo} · Cédula profesional ${consultorio.cedula}`,
-  imagen: {
-    src: "/img/dra-gloria-consulta.webp",
-    alt: "La Dra. Gloria Portillo atendiendo a una paciente",
-  },
 } as const;
 
 export const servicios: ReadonlyArray<{
