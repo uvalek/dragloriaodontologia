@@ -83,10 +83,15 @@ originales/         Archivos pesados sin optimizar (no se versiona)
 Cómo está montado y qué conviene no romper:
 
 - **Solo el primer clip se descarga al abrir la página.** Los demás arrancan con
-  `preload="none"` y no se piden hasta que el clip anterior va por la mitad.
-  Sumados pesan 1 MB, y la mayoría de las visitas llegan por WhatsApp desde un
-  celular con datos: cargarlos todos de golpe sería cobrarle al visitante un
-  video que quizá no llegue a ver.
+  `preload="none"` y no se piden hasta que el clip anterior va por la mitad
+  **y** la página ha terminado de cargar. Esa segunda condición no es un
+  adorno: con un primer clip de 2.5 s, "a mitad" cae en el segundo 1.25, cuando
+  el navegador aún está trayendo las fuentes, y el video se colaba en la cola.
+- **Cada clip tiene dos versiones**: 1920 px para escritorio y 1280 px para
+  celular, elegidas con `media` en los `<source>`. En una pantalla de 390 px,
+  1920 es tres veces más información de la que cabe, y la mayoría de las
+  visitas llegan por WhatsApp desde el celular. El celular descarga 566 KB de
+  video donde el escritorio descarga 1412 KB.
 - **Cada clip es un `<video>` propio, superpuesto.** Cambiar el `src` de uno
   solo dejaría el hueco en negro mientras el navegador abre el archivo
   siguiente.

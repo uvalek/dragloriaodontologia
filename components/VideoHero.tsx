@@ -2,8 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/** Los clips del hero, en el orden en que se ven. Al terminar el último vuelve al primero. */
-const CLIPS = ["/video/hero-1.mp4", "/video/hero-2.mp4"] as const;
+/** Los clips del hero, en orden. Al terminar el último vuelve al primero. */
+const CLIPS = ["hero-1", "hero-2"] as const;
+
+/**
+ * A partir de aquí se sirve la versión de 1920 px; por debajo, la de 1280.
+ *
+ * En una pantalla de celular, 1920 px es tres veces más información de la que
+ * caben, y la mayoría de las visitas llegan por WhatsApp desde el celular. La
+ * versión ligera pesa un 58 % menos.
+ *
+ * El navegador elige el `<source>` una sola vez, al cargar: si alguien
+ * redimensiona la ventana no cambia de versión. Da igual, nadie pasa de móvil
+ * a escritorio a media visita.
+ */
+const CORTE = "(min-width: 900px)";
 
 /**
  * Fondo del hero: encadena varios videos, uno tras otro, en bucle.
@@ -35,12 +48,26 @@ export default function VideoHero() {
   /* En una ref y no en estado: solo la consultan los manejadores, y guardarla
      en estado obligaría a un render extra que no cambia nada en pantalla. */
   const quieto = useRef(false);
+  /* Hasta que la página no ha terminado de cargar, no se pide ningún clip
+     extra. Con un primer clip de 2.5 s, "a mitad" cae en el segundo 1.25,
+     cuando el navegador todavía está trayendo las fuentes y el resto de la
+     página: el video se colaría en la cola y retrasaría lo que sí se ve. */
+  const paginaLista = useRef(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       quieto.current = true;
       refs.current.forEach((v) => v?.pause());
       return;
+    }
+
+    if (document.readyState === "complete") {
+      paginaLista.current = true;
+    } else {
+      const marcar = () => {
+        paginaLista.current = true;
+      };
+      window.addEventListener("load", marcar, { once: true });
     }
 
     const primero = refs.current[0];
@@ -73,7 +100,7 @@ export default function VideoHero() {
 
   /** A mitad del clip actual se pide el siguiente, para que llegue a tiempo. */
   const alAvanzar = (indice: number) => {
-    if (quieto.current) return;
+    if (quieto.current || !paginaLista.current) return;
     const v = refs.current[indice];
     if (!v || !v.duration || v.currentTime < v.duration / 2) return;
     const siguiente = refs.current[(indice + 1) % CLIPS.length];
@@ -85,9 +112,9 @@ export default function VideoHero() {
 
   return (
     <div data-entrada="escala" style={{ position: "absolute", inset: 0 }} aria-hidden="true">
-      {CLIPS.map((src, i) => (
+      {CLIPS.map((nombre, i) => (
         <video
-          key={src}
+          key={nombre}
           ref={(el) => {
             refs.current[i] = el;
           }}
@@ -115,7 +142,11 @@ export default function VideoHero() {
             transition: "opacity .8s ease",
           }}
         >
-          <source src={src} type="video/mp4" />
+          {/* El orden importa: el navegador se queda con el primer <source>
+              cuyo `media` encaje, así que la versión pesada va primero y
+              condicionada. */}
+          <source src={`/video/${nombre}.mp4`} media={CORTE} type="video/mp4" />
+          <source src={`/video/${nombre}-movil.mp4`} type="video/mp4" />
         </video>
       ))}
     </div>
