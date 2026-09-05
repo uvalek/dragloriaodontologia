@@ -108,36 +108,6 @@ export default function Hero() {
         </div>
       </nav>
 
-      {/* Rótulo flotante con el tratamiento destacado. Se oculta en pantallas
-          estrechas: encima del titular no cabe sin taparlo. */}
-      <div
-        className="solo-escritorio"
-        data-entrada
-        style={{
-          position: "absolute",
-          top: "21%",
-          left: "var(--lateral)",
-          zIndex: 5,
-          width: "clamp(268px, 26vw, 350px)",
-          padding: "clamp(14px, 1.5vw, 20px) clamp(16px, 1.6vw, 22px)",
-          border: "1px solid rgba(255,255,255,0.55)",
-          borderRadius: 14,
-          backdropFilter: "blur(2px)",
-          alignItems: "flex-start",
-          gap: "clamp(12px, 1.4vw, 18px)",
-          ["--retraso" as string]: "160ms",
-        }}
-      >
-        <svg width="56" height="56" viewBox="0 0 66 66" fill="none" aria-hidden="true" style={{ flex: "none", marginTop: 2 }}>
-          <path d="M12 14c0-4 3-6 6-6s5 2 5 6-1 8-2.5 12-1 8-2.5 8-2-4-2.5-8S12 18 12 14Z" fill="rgba(255,255,255,0.92)" />
-          <path d="M27 12c0-4 3-6 6-6s5 2 5 6-1 8-2.5 12-1 8-2.5 8-2-4-2.5-8S27 16 27 12Z" fill="rgba(255,255,255,0.92)" />
-          <path d="M42 14c0-4 3-6 6-6s5 2 5 6-1 8-2.5 12-1 8-2.5 8-2-4-2.5-8S42 18 42 14Z" fill="rgba(255,255,255,0.92)" />
-          <path d="M18 34v22M33 32v24M48 34v22" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
-        </svg>
-        <span style={{ fontSize: "clamp(18px, 1.7vw, 23px)", lineHeight: 1.22, color: "#fff", letterSpacing: "-0.01em" }}>
-          {hero.destacado}
-        </span>
-      </div>
 
       <div
         style={{

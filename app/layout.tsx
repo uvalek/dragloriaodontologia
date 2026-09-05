@@ -26,13 +26,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITIO),
   title: "Dra. Gloria Portillo Atempa — Dentista en Zacatelco, Tlaxcala",
   description:
-    "Consultorio dental en el centro de Zacatelco, Tlaxcala. 25 años de experiencia en odontología general para toda la familia: limpiezas, resinas, endodoncia, prótesis y odontopediatría. Agende su cita por WhatsApp.",
+    "Consultorio dental en el centro de Zacatelco, Tlaxcala. 25 años de experiencia en odontología general para toda la familia: limpiezas, resinas, endodoncia, cirugía bucal, prótesis fija y removible, odontología estética y odontopediatría. Agende su cita por WhatsApp.",
   keywords: [
     "dentista Zacatelco",
     "odontóloga Tlaxcala",
     "consultorio dental Zacatelco",
     "limpieza dental Zacatelco",
     "endodoncia Tlaxcala",
+    "prótesis dental Zacatelco",
+    "cirugía bucal Tlaxcala",
+    "odontología estética Zacatelco",
     "Dra. Gloria Portillo Atempa",
   ],
   authors: [{ name: "Dra. Gloria Portillo Atempa" }],

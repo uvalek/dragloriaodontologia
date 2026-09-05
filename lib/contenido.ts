@@ -100,8 +100,6 @@ export const resenas = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const hero = {
-  /** Rótulo flotante sobre el video. */
-  destacado: "Carillas Dentales de Porcelana",
   /** Las tres líneas del titular. Se parten a mano: el diseño las escalona. */
   titulo: ["Odontología", "Estética & Salud", "Dental Integral"],
   /** Iniciales de los pacientes que dejaron las reseñas visibles. */
@@ -155,19 +153,13 @@ export const servicios: ReadonlyArray<{
     },
   },
   {
-    titulo: "Resinas y empastes",
+    // La doctora trabaja con resina, no con amalgama: el título decía "Resinas
+    // y empastes" y se corrigió a petición suya.
+    titulo: "Resinas",
     descripcion: "Restauración de caries con material del color del diente.",
     imagen: {
       src: "/img/tratamientos/resinas.webp",
       alt: "Trabajo de precisión sobre un molde dental",
-    },
-  },
-  {
-    titulo: "Extracciones",
-    descripcion: "Con anestesia local, indicaciones claras y revisión posterior.",
-    imagen: {
-      src: "/img/tratamientos/extracciones.webp",
-      alt: "Procedimiento dental con instrumental esterilizado",
     },
   },
   {
@@ -179,10 +171,26 @@ export const servicios: ReadonlyArray<{
     },
   },
   {
-    // El diseño dejó este hueco sin foto. La tarjeta funciona igual, con el
-    // fondo rosa liso; en cuanto haya una imagen se llena aquí.
-    titulo: "Prótesis y placas",
-    descripcion: "Prótesis fijas y removibles ajustadas a su mordida.",
+    titulo: "Extracciones",
+    descripcion: "Con anestesia local, indicaciones claras y revisión posterior.",
+    imagen: {
+      src: "/img/tratamientos/extracciones.webp",
+      alt: "Procedimiento dental con instrumental esterilizado",
+    },
+  },
+  {
+    titulo: "Cirugía bucal",
+    descripcion: "Procedimientos quirúrgicos menores, con anestesia local y seguimiento.",
+    imagen: null,
+  },
+  {
+    titulo: "Prótesis fija y removible",
+    descripcion: "Prótesis ajustadas a su mordida, fijas o de quitar y poner.",
+    imagen: null,
+  },
+  {
+    titulo: "Odontología estética",
+    descripcion: "Tratamientos para mejorar el aspecto de la sonrisa.",
     imagen: null,
   },
   {
