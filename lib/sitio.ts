@@ -1,21 +1,19 @@
 /**
  * URL pública del sitio.
  *
- * Se resuelve sola, en este orden:
+ * Es la que usan la etiqueta canónica, el Open Graph (la miniatura que se ve al
+ * compartir por WhatsApp), el sitemap y el robots.txt. Tiene que ser una sola y
+ * apuntar siempre al dominio definitivo: si Google encuentra el mismo contenido
+ * en dos direcciones, reparte el posicionamiento entre las dos.
  *
- *  1. `NEXT_PUBLIC_SITIO` — se define a mano en Vercel cuando ya haya dominio
- *     propio (por ejemplo https://dragloriaportillo.com).
- *  2. `VERCEL_PROJECT_PRODUCTION_URL` — la inyecta Vercel en cada compilación
- *     con el subdominio del proyecto. Gracias a esto el sitio se publica sin
- *     configurar nada y las URL canónicas salen correctas desde el primer
- *     despliegue.
- *  3. localhost, para desarrollo.
+ * Se resuelve en este orden:
  *
- * Antes esta URL estaba escrita a mano en tres archivos distintos, lo que
- * garantizaba que tarde o temprano quedaran desincronizados.
+ *  1. `NEXT_PUBLIC_SITIO`, por si algún día hace falta forzarla desde Vercel.
+ *  2. El dominio propio, en cualquier compilación de producción.
+ *  3. localhost, en desarrollo.
  */
+const DOMINIO = "https://gloriaportillo.com";
+
 export const SITIO =
   process.env.NEXT_PUBLIC_SITIO ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
+  (process.env.NODE_ENV === "production" ? DOMINIO : "http://localhost:3000");

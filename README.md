@@ -198,7 +198,7 @@ el paciente.
 
 | Rama | Dirección | Qué es |
 |---|---|---|
-| `main` | `dragloriaportillo.vercel.app` | el sitio real, el que se comparte |
+| `main` | `gloriaportillo.com` | el sitio real, el que se comparte |
 | `rediseno` | `dragloriaportillo-git-rediseno-aleks-projects-2fe2ebd7.vercel.app` | el borrador |
 
 La dirección de `rediseno` es fija: siempre muestra el último commit de esa
@@ -238,14 +238,20 @@ importarlo no hay que cambiar nada: framework Next.js, comandos por defecto y
 Después del primer despliegue, activar **Web Analytics** en la pestaña Analytics
 del proyecto. Sin eso el evento `clic_whatsapp` no se registra en ningún lado.
 
-### Cuando haya dominio propio
+### El dominio
 
-La URL del sitio (canónica, Open Graph, sitemap y robots) se resuelve sola desde
-`VERCEL_PROJECT_PRODUCTION_URL`, así que no hay nada escrito a mano. Al conectar
-un dominio, agregar en Vercel la variable:
+El sitio vive en **https://gloriaportillo.com**. El dominio está registrado en
+Hostinger, que conserva el DNS (así el correo del dominio no depende de Vercel),
+y apunta a Vercel con dos registros:
 
-```
-NEXT_PUBLIC_SITIO = https://eldominio.com
-```
+| Tipo | Nombre | Valor |
+|---|---|---|
+| `A` | `@` | `216.198.79.1` |
+| `CNAME` | `www` | `918a034529c7adb4.vercel-dns-017.com` |
 
-y volver a desplegar. Ver `lib/sitio.ts`.
+`www` existe solo para redirigir al dominio corto. El certificado HTTPS lo
+renueva Vercel solo.
+
+La URL pública está en `lib/sitio.ts`, en un único sitio. Si algún día cambia el
+dominio, se toca ahí (o se define `NEXT_PUBLIC_SITIO` en Vercel, que manda sobre
+el valor del código).
