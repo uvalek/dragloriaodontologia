@@ -62,3 +62,34 @@ const og = await sharp(FOTO)
   .webp({ quality: 85 })
   .toFile(`${DESTINO}/og-dra-gloria-portillo.webp`);
 console.log(`OK ${DESTINO}/og-dra-gloria-portillo.webp — ${(og.size / 1024).toFixed(0)} KB`);
+
+/**
+ * Fotos de las tarjetas de tratamiento.
+ *
+ * Se generan en 16:10, que es la proporción del hueco en la tarjeta: así la
+ * foto no se recorta una segunda vez en el navegador y se controla aquí qué
+ * parte se ve. Las que no tengan original en `originales/tratamientos/` se
+ * omiten, porque normalmente se cambia una sola.
+ */
+const TRATAMIENTOS = [
+  { entrada: "CIRUGIA.jpg", salida: "cirugia" },
+  { entrada: "PROTESIS.jpg", salida: "protesis" },
+  { entrada: "ESTETICA.jpg", salida: "estetica" },
+];
+
+await mkdir(`${DESTINO}/tratamientos`, { recursive: true });
+
+for (const { entrada, salida } of TRATAMIENTOS) {
+  const origen = `${ORIGEN}/tratamientos/${entrada}`;
+  if (!(await existe(origen))) {
+    console.log(`· se omite ${salida} (falta ${origen})`);
+    continue;
+  }
+  const r = await sharp(origen)
+    .resize(960, 600, { fit: "cover", position: "centre" })
+    .webp({ quality: 78 })
+    .toFile(`${DESTINO}/tratamientos/${salida}.webp`);
+  console.log(
+    `OK ${DESTINO}/tratamientos/${salida}.webp — ${(r.size / 1024).toFixed(0)} KB`,
+  );
+}

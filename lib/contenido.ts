@@ -181,17 +181,26 @@ export const servicios: ReadonlyArray<{
   {
     titulo: "Cirugía bucal",
     descripcion: "Procedimientos quirúrgicos menores, con anestesia local y seguimiento.",
-    imagen: null,
+    imagen: {
+      src: "/img/tratamientos/cirugia.webp",
+      alt: "Instrumental quirúrgico esterilizado, preparado sobre un campo estéril",
+    },
   },
   {
     titulo: "Prótesis fija y removible",
     descripcion: "Prótesis ajustadas a su mordida, fijas o de quitar y poner.",
-    imagen: null,
+    imagen: {
+      src: "/img/tratamientos/protesis.webp",
+      alt: "Modelos de yeso de una dentadura con una prótesis en preparación",
+    },
   },
   {
     titulo: "Odontología estética",
     descripcion: "Tratamientos para mejorar el aspecto de la sonrisa.",
-    imagen: null,
+    imagen: {
+      src: "/img/tratamientos/estetica.webp",
+      alt: "Guía de tonos dentales junto a la sonrisa de una paciente para elegir el color",
+    },
   },
   {
     titulo: "Odontopediatría",
