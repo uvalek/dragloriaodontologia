@@ -39,6 +39,10 @@ const CENTRO_X = 0.54;
 const FOTO_2 = `${ORIGEN}/dra-gloria-2.jpg`;
 const RECORTE_2 = 0.22;
 
+/** Tercer retrato, el que se ve primero. Mismo criterio de recorte. */
+const FOTO_3 = `${ORIGEN}/dra-gloria-3.png`;
+const RECORTE_3 = 0.1;
+
 const existe = (f) => access(f).then(() => true, () => false);
 
 if (!(await existe(FOTO))) {
@@ -62,18 +66,25 @@ const sitio = await sharp(FOTO)
   .toFile(`${DESTINO}/dra-gloria.webp`);
 console.log(`OK ${DESTINO}/dra-gloria.webp — ${(sitio.size / 1024).toFixed(0)} KB`);
 
-// — Retrato 2, el mismo cuadrado sobre una foto vertical.
-if (await existe(FOTO_2)) {
-  const m2 = await sharp(FOTO_2).rotate().metadata();
-  const lado = Math.min(m2.width, m2.height);
-  const arriba = Math.round((m2.height - lado) * RECORTE_2);
-  const r2 = await sharp(FOTO_2)
+// — Retratos verticales: el mismo cuadrado, cada uno con su anclaje.
+for (const [origen, recorte, salida] of [
+  [FOTO_2, RECORTE_2, "dra-gloria-2"],
+  [FOTO_3, RECORTE_3, "dra-gloria-3"],
+]) {
+  if (!(await existe(origen))) {
+    console.log(`· se omite ${salida} (falta ${origen})`);
+    continue;
+  }
+  const m = await sharp(origen).rotate().metadata();
+  const lado = Math.min(m.width, m.height);
+  const arriba = Math.round((m.height - lado) * recorte);
+  const r = await sharp(origen)
     .rotate()
-    .extract({ left: Math.round((m2.width - lado) / 2), top: arriba, width: lado, height: lado })
+    .extract({ left: Math.round((m.width - lado) / 2), top: arriba, width: lado, height: lado })
     .resize({ width: 1000 })
     .webp({ quality: 82 })
-    .toFile(`${DESTINO}/dra-gloria-2.webp`);
-  console.log(`OK ${DESTINO}/dra-gloria-2.webp — ${(r2.size / 1024).toFixed(0)} KB`);
+    .toFile(`${DESTINO}/${salida}.webp`);
+  console.log(`OK ${DESTINO}/${salida}.webp — ${(r.size / 1024).toFixed(0)} KB`);
 }
 
 // — Open Graph: la miniatura que se ve al compartir el enlace por WhatsApp.

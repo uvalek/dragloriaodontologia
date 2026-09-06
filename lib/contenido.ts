@@ -115,6 +115,10 @@ export const hero = {
    */
   retratos: [
     {
+      src: "/img/dra-gloria-3.webp",
+      alt: "Retrato de la Dra. Gloria Portillo Atempa en su consultorio",
+    },
+    {
       src: "/img/dra-gloria.webp",
       alt: "La Dra. Gloria Portillo Atempa, sonriendo en la recepción de su consultorio",
     },
