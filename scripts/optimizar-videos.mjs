@@ -36,11 +36,12 @@ const DESTINO = "public/video";
  */
 const CLIPS = [
   { nombre: "hero-1", segundos: 2.5, crf: 30 },
-  // Se corta en el segundo 2: a partir de ahí la cámara se cierra sobre la boca
-  // abierta del paciente, y ese plano en la primera pantalla espanta a quien ya
-  // viene con miedo al dentista. Hasta ahí se ve el consultorio y al equipo
-  // trabajando, que es lo que da confianza.
-  { nombre: "hero-2", segundos: 2, crf: 32 },
+  // Se corta en el segundo 2.5. A partir de ahí la cámara se cierra sobre la
+  // boca abierta del paciente en primer plano, y ese plano en la primera
+  // pantalla espanta a quien ya viene con miedo al dentista. Hasta el 2.5 se ve
+  // el consultorio y al equipo trabajando en plano medio, que es lo que da
+  // confianza.
+  { nombre: "hero-2", segundos: 2.5, crf: 32 },
 ];
 
 /**
