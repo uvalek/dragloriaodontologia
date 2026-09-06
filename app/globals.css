@@ -373,3 +373,24 @@
 @media (prefers-reduced-motion: reduce) {
   .tarjeta-titulo:hover { transform: none; }
 }
+
+@layer components {
+  /* Fotos del consultorio: se acercan un poco al pasar el cursor, para que se
+     note que se pueden abrir. */
+  .foto-consultorio img { transition: transform .6s cubic-bezier(.16, 1, .3, 1); }
+  .foto-consultorio:hover img { transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foto-consultorio:hover img { transform: none; }
+}
+
+@layer utilities {
+  /* Galería del consultorio: una columna en el celular, dos a partir de
+     tablet. Son cuatro fotos, así que dos columnas dan un 2x2 parejo. */
+  .rejilla-galeria { grid-template-columns: 1fr; }
+
+  @media (min-width: 700px) {
+    .rejilla-galeria { grid-template-columns: repeat(2, 1fr); }
+  }
+}

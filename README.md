@@ -35,6 +35,7 @@ Otros comandos:
 | Agregar o quitar un tratamiento | `lib/contenido.ts` → `servicios` (la rejilla se reacomoda sola) |
 | Reseñas | `lib/contenido.ts` → `resenas` |
 | Títulos y certificaciones | `lib/contenido.ts` → `formacion` |
+| Fotos del consultorio | `lib/contenido.ts` → `instalaciones` |
 | Colores y tipografías | `app/globals.css` |
 | Título y descripción para Google | `app/layout.tsx` → `metadata` |
 | Ficha del negocio para Google | `lib/datos-negocio.ts` |
@@ -60,6 +61,7 @@ components/
   Resenas.tsx       Reseñas de Google
   PorQue.tsx        Las cuatro razones
   Formacion.tsx     Títulos y certificaciones
+  Instalaciones.tsx Galería del consultorio, con visor
   Ubicacion.tsx     Dirección, horario y mapa
   PieDePagina.tsx   Contacto repetido
   EnlaceWhatsApp.tsx  Enlace que registra el clic
@@ -71,6 +73,7 @@ lib/
 public/
   img/              Fotos en WebP
   img/titulos/      Títulos escaneados
+  img/consultorio/  Fotos de las instalaciones
   video/            Video del hero + su póster
 originales/         Archivos pesados sin optimizar (no se versiona)
 ```
@@ -117,6 +120,12 @@ Cómo está montado y qué conviene no romper:
 4. Borra `.next` antes de volver a mirar: si el nombre del archivo no cambia,
    el servidor sigue sirviendo la versión anterior desde su caché y parece que
    el reemplazo no funcionó.
+
+**Fotos del celular: revisa la orientación.** Las de iPhone y Android suelen
+venir con la rotación guardada como un dato aparte (EXIF), no aplicada a los
+píxeles. Al procesarlas hay que llamar a `.rotate()` sin argumentos, que es lo
+que aplica ese dato; sin eso tres de las cuatro fotos del consultorio se
+publicaban giradas 90 grados.
 
 Dos cosas que conviene revisar al cambiar la foto del hero:
 

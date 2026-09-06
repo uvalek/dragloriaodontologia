@@ -281,6 +281,37 @@ export const porQue = {
   ],
 } as const;
 
+/**
+ * Fotos del consultorio.
+ *
+ * Todas se sirven en 4:3 para que la galería quede pareja. Tres de las cuatro
+ * originales son verticales y se recortan al centro; los originales están en
+ * `originales/consultorio/`.
+ */
+export const instalaciones = {
+  titulo: "Así es el consultorio",
+  entradilla:
+    "Antes de venir puede ver dónde va a sentarse. Toque una foto para verla en grande.",
+  fotos: [
+    {
+      src: "/img/consultorio/1.webp",
+      alt: "Sala de atención con sillón dental junto a la ventana y mueble de trabajo",
+    },
+    {
+      src: "/img/consultorio/2.webp",
+      alt: "Zona de preparación con lavabo, material desechable y superficie de trabajo",
+    },
+    {
+      src: "/img/consultorio/3.webp",
+      alt: "Sala de atención con sillón dental, pantalla en la pared y silla para acompañante",
+    },
+    {
+      src: "/img/consultorio/4.webp",
+      alt: "Mueble de instrumental con la unidad dental y contenedor de residuos",
+    },
+  ],
+} as const;
+
 export const ubicacion = {
   kicker: "Visítenos",
   titulo: "Dónde y cuándo",
