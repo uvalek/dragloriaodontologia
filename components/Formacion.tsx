@@ -24,9 +24,6 @@ export default function Formacion() {
     >
       <div className="contenedor">
         <div data-animar style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: "clamp(22px, 2.6vw, 36px)" }}>
-          <span style={{ fontSize: "clamp(11px, 1vw, 13px)", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-kicker)" }}>
-            {formacion.kicker}
-          </span>
           <h2 style={{ fontSize: "clamp(34px, 4.4vw, 62px)", maxWidth: "20ch" }}>{formacion.titulo}</h2>
           <p style={{ margin: 0, fontSize: "clamp(16px, 1.4vw, 19px)", lineHeight: 1.55, color: "var(--color-suave)", maxWidth: "52ch" }}>
             {formacion.entradilla}

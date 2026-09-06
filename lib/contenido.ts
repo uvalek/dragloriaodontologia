@@ -211,7 +211,6 @@ export const servicios: ReadonlyArray<{
  * profesionales y decir de más sería atribuirle una especialidad que no tiene.
  */
 export const formacion = {
-  kicker: "Formación",
   titulo: "Títulos y certificaciones",
   entradilla:
     "Los documentos están a la vista. Puede abrirlos y comprobarlos usted mismo.",
