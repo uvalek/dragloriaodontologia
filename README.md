@@ -34,6 +34,7 @@ Otros comandos:
 | Textos de cualquier sección | `lib/contenido.ts` |
 | Agregar o quitar un tratamiento | `lib/contenido.ts` → `servicios` (la rejilla se reacomoda sola) |
 | Reseñas | `lib/contenido.ts` → `resenas` |
+| Títulos y certificaciones | `lib/contenido.ts` → `formacion` |
 | Colores y tipografías | `app/globals.css` |
 | Título y descripción para Google | `app/layout.tsx` → `metadata` |
 | Ficha del negocio para Google | `lib/datos-negocio.ts` |
@@ -58,6 +59,7 @@ components/
   Tratamientos.tsx  Las seis tarjetas
   Resenas.tsx       Reseñas de Google
   PorQue.tsx        Las cuatro razones
+  Formacion.tsx     Títulos y certificaciones
   Ubicacion.tsx     Dirección, horario y mapa
   PieDePagina.tsx   Contacto repetido
   EnlaceWhatsApp.tsx  Enlace que registra el clic
@@ -68,6 +70,7 @@ lib/
   sitio.ts          URL pública
 public/
   img/              Fotos en WebP
+  img/titulos/      Títulos escaneados
   video/            Video del hero + su póster
 originales/         Archivos pesados sin optimizar (no se versiona)
 ```

@@ -357,3 +357,19 @@
     }
   }
 }
+
+@layer components {
+  /* Tarjetas de la sección de títulos: se levantan al pasar el cursor, como
+     las de tratamientos. */
+  .tarjeta-titulo {
+    display: block;
+    transition: transform .35s cubic-bezier(.16, 1, .3, 1);
+  }
+  .tarjeta-titulo:hover { transform: translateY(-4px); }
+  .tarjeta-titulo:hover h3 { color: var(--color-acento); }
+  .tarjeta-titulo h3 { transition: color .25s ease; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta-titulo:hover { transform: none; }
+}

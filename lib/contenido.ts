@@ -203,6 +203,49 @@ export const servicios: ReadonlyArray<{
   },
 ];
 
+/**
+ * Formación de la doctora.
+ *
+ * Los datos están transcritos de los documentos originales, que se guardan en
+ * `originales/titulos/`. No se resumen ni se reinterpretan: son títulos
+ * profesionales y decir de más sería atribuirle una especialidad que no tiene.
+ */
+export const formacion = {
+  kicker: "Formación",
+  titulo: "Títulos y certificaciones",
+  entradilla:
+    "Los documentos están a la vista. Puede abrirlos y comprobarlos usted mismo.",
+  documentos: [
+    {
+      institucion: "Benemérita Universidad Autónoma de Puebla",
+      nombre: "Cirujano Dentista",
+      detalle: "Título profesional · 1998",
+      imagen: {
+        src: "/img/titulos/buap.webp",
+        alt: "Título de Cirujano Dentista expedido por la Benemérita Universidad Autónoma de Puebla a Gloria Portillo Atempa en 1998",
+      },
+    },
+    {
+      institucion: "Universidad Popular Autónoma del Estado de Puebla",
+      nombre: "Diplomado en Odontología Estética",
+      detalle: "148 horas · 2013",
+      imagen: {
+        src: "/img/titulos/upaep.webp",
+        alt: "Diploma de la UPAEP por el diplomado en Odontología Estética, de 148 horas, cursado en 2013",
+      },
+    },
+    {
+      institucion: "Colegio de Prostodoncia e Implantología del Estado de Puebla",
+      nombre: "Seminario Odontoprotésico",
+      detalle: "16 horas crédito · 1998",
+      imagen: {
+        src: "/img/titulos/prostodoncia.webp",
+        alt: "Constancia del Colegio de Prostodoncia e Implantología del Estado de Puebla por el Primer Seminario Odontoprotésico, de 1998",
+      },
+    },
+  ],
+} as const;
+
 export const porQue = {
   kicker: "Por qué el consultorio",
   titulo: "Por qué las familias de Zacatelco vuelven",
