@@ -49,7 +49,34 @@ export default function AnimarAlEntrar() {
     );
 
     elementos.forEach((el) => observador.observe(el));
-    return () => observador.disconnect();
+
+    /* Red de seguridad para el final de la página.
+     *
+     * El margen negativo de arriba exige que el elemento entre 80 px en
+     * pantalla antes de revelarlo. Los últimos elementos del documento nunca
+     * llegan a cumplirlo: por mucho que se baje, el scroll se acaba antes. Así
+     * es como el enlace de WhatsApp del pie se quedaba invisible en el celular.
+     *
+     * Un centinela al final del <body> avisa cuando se ha llegado abajo del
+     * todo, y entonces se revela lo que quede pendiente. */
+    const centinela = document.createElement("div");
+    centinela.style.cssText = "height:1px;width:1px;pointer-events:none";
+    centinela.setAttribute("aria-hidden", "true");
+    document.body.append(centinela);
+
+    const final = new IntersectionObserver(([entrada]) => {
+      if (!entrada.isIntersecting) return;
+      elementos.forEach((el) => el.classList.add("revelado"));
+      final.disconnect();
+      observador.disconnect();
+    });
+    final.observe(centinela);
+
+    return () => {
+      observador.disconnect();
+      final.disconnect();
+      centinela.remove();
+    };
   }, []);
 
   /**

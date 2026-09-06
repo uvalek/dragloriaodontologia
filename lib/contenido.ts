@@ -108,10 +108,21 @@ export const hero = {
     { iniciales: "JL", degradado: "linear-gradient(150deg, #6f8ea8, #3d566b)" },
     { iniciales: "AC", degradado: "linear-gradient(150deg, #d8b25e, #9a7522)" },
   ],
-  imagen: {
-    src: "/img/dra-gloria.webp",
-    alt: "La Dra. Gloria Portillo Atempa, sonriendo en su consultorio de Zacatelco",
-  },
+  /**
+   * Retratos que alternan en la sección de presentación. Los dos se recortan a
+   * cuadrado (ver scripts/optimizar-imagenes.mjs) para que al cambiar de uno a
+   * otro el hueco no cambie de tamaño.
+   */
+  retratos: [
+    {
+      src: "/img/dra-gloria.webp",
+      alt: "La Dra. Gloria Portillo Atempa, sonriendo en la recepción de su consultorio",
+    },
+    {
+      src: "/img/dra-gloria-2.webp",
+      alt: "La Dra. Gloria Portillo Atempa, con bata blanca, junto a la unidad dental de su consultorio",
+    },
+  ],
 } as const;
 
 /** Enlaces del menú superior. */

@@ -27,6 +27,18 @@ const DESTINO = "public/img";
 const FOTO = `${ORIGEN}/dra-gloria-real.png`;
 const CENTRO_X = 0.54;
 
+/**
+ * La segunda foto del retrato, que alterna con la primera.
+ *
+ * Es vertical y la anterior apaisada, así que las dos se recortan a cuadrado:
+ * es la única forma de que al cambiar de una a otra el hueco no cambie de
+ * tamaño y el resto de la página no dé un salto. `RECORTE_2` es dónde empieza
+ * el cuadrado dentro de la foto vertical, en tanto por uno del recorte
+ * sobrante: 0 lo pega arriba, 1 abajo.
+ */
+const FOTO_2 = `${ORIGEN}/dra-gloria-2.jpg`;
+const RECORTE_2 = 0.06;
+
 const existe = (f) => access(f).then(() => true, () => false);
 
 if (!(await existe(FOTO))) {
@@ -41,15 +53,28 @@ await mkdir(DESTINO, { recursive: true });
 
 const { width: W, height: H } = await sharp(FOTO).metadata();
 
-// — Foto del sitio: 4:3, que es lo que más se acerca al hueco donde va.
-const ancho43 = Math.round((H * 4) / 3);
-const izq43 = Math.max(0, Math.min(Math.round(W * CENTRO_X - ancho43 / 2), W - ancho43));
+// — Retrato 1, recortado a cuadrado y centrado en ella.
+const izq1 = Math.max(0, Math.min(Math.round(W * CENTRO_X - H / 2), W - H));
 const sitio = await sharp(FOTO)
-  .extract({ left: izq43, top: 0, width: ancho43, height: H })
-  .resize({ width: 1100 })
+  .extract({ left: izq1, top: 0, width: H, height: H })
+  .resize({ width: 1000 })
   .webp({ quality: 82 })
   .toFile(`${DESTINO}/dra-gloria.webp`);
 console.log(`OK ${DESTINO}/dra-gloria.webp — ${(sitio.size / 1024).toFixed(0)} KB`);
+
+// — Retrato 2, el mismo cuadrado sobre una foto vertical.
+if (await existe(FOTO_2)) {
+  const m2 = await sharp(FOTO_2).rotate().metadata();
+  const lado = Math.min(m2.width, m2.height);
+  const arriba = Math.round((m2.height - lado) * RECORTE_2);
+  const r2 = await sharp(FOTO_2)
+    .rotate()
+    .extract({ left: Math.round((m2.width - lado) / 2), top: arriba, width: lado, height: lado })
+    .resize({ width: 1000 })
+    .webp({ quality: 82 })
+    .toFile(`${DESTINO}/dra-gloria-2.webp`);
+  console.log(`OK ${DESTINO}/dra-gloria-2.webp — ${(r2.size / 1024).toFixed(0)} KB`);
+}
 
 // — Open Graph: la miniatura que se ve al compartir el enlace por WhatsApp.
 //   Es una banda apaisada; anclarla arriba sin más corta la sonrisa.

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Contador from "./Contador";
-import { barraDatos, hero, sobreLaDoctora } from "@/lib/contenido";
+import RetratoDoctora from "./RetratoDoctora";
+import { barraDatos, sobreLaDoctora } from "@/lib/contenido";
 
 /**
  * Presentación de la doctora: texto a la izquierda, foto a la derecha, y
@@ -56,25 +56,8 @@ export default function Intro() {
           </p>
         </div>
 
-        <figure data-animar="aparecer" className="foto-zoom" style={{ display: "flex", ["--retraso" as string]: "120ms" }}>
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              minHeight: "clamp(280px, 34vw, 460px)",
-              borderRadius: "var(--radius-tarjeta)",
-              overflow: "hidden",
-              background: "var(--color-rosa-pal)",
-            }}
-          >
-            <Image
-              src={hero.imagen.src}
-              alt={hero.imagen.alt}
-              fill
-              sizes="(max-width: 860px) 92vw, 700px"
-              style={{ objectFit: "cover" }}
-            />
-          </div>
+        <figure data-animar="aparecer" style={{ display: "flex", ["--retraso" as string]: "120ms" }}>
+          <RetratoDoctora />
         </figure>
       </div>
 
