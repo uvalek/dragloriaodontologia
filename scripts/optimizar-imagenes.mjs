@@ -37,7 +37,7 @@ const CENTRO_X = 0.54;
  * sobrante: 0 lo pega arriba, 1 abajo.
  */
 const FOTO_2 = `${ORIGEN}/dra-gloria-2.jpg`;
-const RECORTE_2 = 0.06;
+const RECORTE_2 = 0.22;
 
 const existe = (f) => access(f).then(() => true, () => false);
 
