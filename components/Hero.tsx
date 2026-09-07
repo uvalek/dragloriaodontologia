@@ -2,7 +2,7 @@ import Contador from "./Contador";
 import EnlaceWhatsApp from "./EnlaceWhatsApp";
 import MenuMovil from "./MenuMovil";
 import VideoHero from "./VideoHero";
-import { calificacion, hero, navegacion } from "@/lib/contenido";
+import { hero, navegacion, sedePrincipal } from "@/lib/contenido";
 
 /** Estrella maciza. El mismo trazo en el hero y en las reseñas. */
 function Estrella({ lado, color }: { lado: number; color: string }) {
@@ -158,7 +158,7 @@ export default function Hero() {
             </div>
             <a href="#resenas" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Contador
-                valor={calificacion.total}
+                valor={sedePrincipal.calificacion?.total ?? 0}
                 ancho={2}
                 style={{ fontSize: "clamp(20px, 2vw, 27px)" }}
               />

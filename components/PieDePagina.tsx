@@ -1,5 +1,12 @@
 import EnlaceWhatsApp from "./EnlaceWhatsApp";
-import { consultorio, contacto } from "@/lib/contenido";
+import {
+  direccionUnaLinea,
+  doctora,
+  hrefTel,
+  sucursales,
+  whatsappPrincipal,
+} from "@/lib/contenido";
+import { resumenHorario } from "@/lib/horarios";
 
 /**
  * Pie con los datos de contacto repetidos.
@@ -46,30 +53,42 @@ export default function PieDePagina() {
                 fontSize: 15,
               }}
             >
-              {consultorio.monograma}
+              {doctora.monograma}
             </span>
             <p style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "var(--color-text)" }}>
-              {consultorio.nombre}
+              {doctora.nombre}
             </p>
           </div>
           <p style={{ margin: "12px 0 0" }}>
-            {consultorio.titulo} · Cédula profesional {consultorio.cedula}
+            {doctora.titulo} · Cédula profesional {doctora.cedula}
           </p>
         </div>
 
-        <p data-animar style={{ margin: 0, ["--retraso" as string]: "80ms" }}>{consultorio.direccion.completa}</p>
+        {/* Una celda por sede. El horario sale de `resumenHorario` y no escrito
+            a mano: antes esta era la tercera copia del mismo dato en el sitio, y
+            nada obligaba a que las tres coincidieran. */}
+        {sucursales.map((sede, i) => (
+          <div
+            key={sede.id}
+            data-animar
+            style={{ ["--retraso" as string]: `${80 + i * 80}ms` }}
+          >
+            <p style={{ margin: 0, fontWeight: 600, color: "var(--color-text)" }}>
+              {sede.etiqueta}
+            </p>
+            <p style={{ margin: "6px 0 0" }}>{direccionUnaLinea(sede.direccion)}</p>
+            <p style={{ margin: "6px 0 0" }}>{resumenHorario(sede.horario)}</p>
+            <p style={{ margin: "6px 0 0" }}>
+              <a href={hrefTel(sede.telefono)} style={{ color: "var(--color-acento)" }}>
+                {sede.telefono.visible}
+              </a>
+            </p>
+          </div>
+        ))}
 
-        <p data-animar style={{ margin: 0, ["--retraso" as string]: "160ms" }}>
-          Lunes a viernes 9:00–20:00
-          <br />
-          Sábado 9:00–14:00
-          <br />
-          Domingo cerrado
-        </p>
-
-        <p data-animar style={{ margin: 0, display: "flex", flexDirection: "column", gap: 4, ["--retraso" as string]: "240ms" }}>
-          <a href={contacto.telefonoEnlace} style={{ color: "var(--color-acento)" }}>
-            {contacto.telefonoInternacional}
+        <p data-animar style={{ margin: 0, display: "flex", flexDirection: "column", gap: 4, ["--retraso" as string]: "320ms" }}>
+          <a href={hrefTel(whatsappPrincipal)} style={{ color: "var(--color-acento)" }}>
+            +52 {whatsappPrincipal.visible}
           </a>
           <EnlaceWhatsApp origen="footer" style={{ color: "var(--color-acento)" }}>
             WhatsApp

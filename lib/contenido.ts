@@ -3,97 +3,269 @@
  *
  * La idea es que para cambiar un teléfono, agregar un servicio o actualizar una
  * reseña no haya que abrir un solo componente: se edita este archivo y listo.
- * Los textos son los del diseño aprobado en Claude Design, palabra por palabra.
+ *
+ * El consultorio tiene dos sedes, así que lo que varía entre ellas vive en
+ * `sucursales` y lo que no —la doctora, sus títulos, los tratamientos— vive
+ * aparte. Los datos derivables (el href de un teléfono, la dirección en una
+ * línea, la URL de un mapa) NO se guardan: se calculan con los ayudantes de
+ * abajo. Antes estaban escritos a mano y era cuestión de tiempo que dejaran de
+ * coincidir entre sí.
  */
 
+import type { Franja } from "./horarios";
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Contacto
+// Tipos
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** Número en formato internacional sin signos, que es como lo pide wa.me. */
-const WHATSAPP_NUMERO = "522464635223";
+/** Un número, en las dos únicas formas que hay que guardar. El resto se deriva. */
+export type Telefono = {
+  /** Como se lee en pantalla: "246 463 5223". */
+  visible: string;
+  /** Sin signos ni espacios, que es lo que piden wa.me y los enlaces `tel:`. */
+  e164: string;
+};
 
-/** Mensaje que aparece ya escrito al abrir el chat: baja la fricción de escribir
- *  el primer mensaje, que es donde se pierde la mayoría de las conversiones. */
-const WHATSAPP_MENSAJE = "Hola Dra. Gloria, me gustaría agendar una cita.";
+export type Direccion = {
+  calle: string;
+  colonia: string;
+  codigoPostal: string;
+  ciudad: string;
+  estado: string;
+};
 
-export const contacto = {
-  telefonoVisible: "246 463 5223",
-  telefonoInternacional: "+52 246 463 5223",
-  /** href para <a href="tel:…"> */
-  telefonoEnlace: "tel:+522464635223",
-  whatsapp: `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(WHATSAPP_MENSAJE)}`,
-  mapa: "https://www.google.com/maps/place/Dra.+Gloria+Portillo+Atempa/@19.2157807,-98.241731,17z",
-  /** Iframe del mapa. Con `output=embed` no hace falta clave de API de Google. */
-  mapaEmbebido:
-    "https://maps.google.com/maps?q=Av.%20Lerdo%20de%20Tejada%2012%2C%20Centro%2C%20Segunda%20Secc%2C%2090740%20Zacatelco%2C%20Tlaxcala&z=16&hl=es&output=embed",
-} as const;
+export type Calificacion = { promedio: number; total: number };
 
-export const consultorio = {
+export type Resena = { texto: string; autor: string };
+
+export type Sucursal = {
+  /**
+   * Identificador estable. Se usa como ancla en la página, clave de React,
+   * fragmento del `@id` en los datos estructurados y dimensión del evento de
+   * analítica. No cambiarlo una vez publicado.
+   */
+  id: string;
+  /**
+   * El nombre EXACTO de la ficha de Google. Google empareja el marcado con el
+   * perfil comparando nombre, dirección y teléfono; si no coincide letra por
+   * letra, no une las dos cosas.
+   */
+  nombre: string;
+  /** Cómo se le llama en la página, que puede ser más corto y más humano. */
+  etiqueta: string;
+  /** Una línea que sitúa la sede sin obligar a leer la dirección completa. */
+  descriptor: string;
+  /** Distintivo corto, si tiene algo que la diferencie. `null` si no. */
+  distintivo: string | null;
+  direccion: Direccion;
+  coordenadas: { latitud: number; longitud: number };
+  telefono: Telefono;
+  /** WhatsApp propio de la sede. `null` = solo se puede llamar. */
+  whatsapp: Telefono | null;
+  /** Mensaje ya escrito al abrir el chat de esta sede. */
+  mensajeWhatsApp: string;
+  horario: readonly Franja[];
+  /** Su ficha en Google Maps: botón "ver en Google" y `hasMap` del JSON-LD. */
+  enlaceMapa: string;
+  /** Perfiles públicos comprobables. Van al `sameAs` de los datos estructurados. */
+  perfiles: readonly string[];
+  /**
+   * `null` cuando Google todavía no publica un promedio para esta ficha.
+   * Es `null` y no opcional a propósito: así el código está obligado a decidir
+   * qué enseñar cuando no hay nota, en vez de dejar pasar un `undefined`.
+   * Nunca se inventa ni se promedia con la de la otra sede.
+   */
+  calificacion: Calificacion | null;
+  resenas: readonly Resena[];
+  /** Descripción de esta sede para los datos estructurados. */
+  descripcionSeo: string;
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Derivados
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const hrefTel = (t: Telefono) => `tel:+${t.e164}`;
+
+/** Los dos números son mexicanos, así que la lada de país es siempre +52. */
+export const telefonoInternacional = (t: Telefono) => `+52 ${t.visible}`;
+
+export const hrefWhatsApp = (t: Telefono, mensaje: string) =>
+  `https://wa.me/${t.e164}?text=${encodeURIComponent(mensaje)}`;
+
+export const direccionUnaLinea = (d: Direccion) =>
+  `${d.calle}, ${d.colonia}, ${d.codigoPostal} ${d.ciudad}, ${d.estado}`;
+
+/**
+ * Iframe del mapa. Con `output=embed` no hace falta clave de API de Google.
+ *
+ * Se centra en las coordenadas y no en la dirección escrita: una dirección hay
+ * que geocodificarla y en un pueblo con calles repetidas el pin puede acabar a
+ * dos cuadras. El par de coordenadas es exacto. Lo que va entre paréntesis es
+ * la etiqueta del pin.
+ */
+export const hrefMapaEmbebido = (s: Sucursal) =>
+  `https://maps.google.com/maps?q=${s.coordenadas.latitud},${s.coordenadas.longitud}` +
+  `(${encodeURIComponent(s.nombre)})&z=17&hl=es&output=embed`;
+
+/**
+ * "Cómo llegar" abre la navegación con el destino ya puesto, que es lo que
+ * quiere quien toca ese botón. Ver la ficha se deja para `enlaceMapa`.
+ */
+export const hrefComoLlegar = (s: Sucursal) =>
+  `https://www.google.com/maps/dir/?api=1&destination=${s.coordenadas.latitud},${s.coordenadas.longitud}`;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// La doctora
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Es la misma persona en las dos sedes, así que nada de esto vive dentro de una. */
+export const doctora = {
   nombre: "Dra. Gloria Portillo Atempa",
   nombreCorto: "Dra. Gloria Portillo",
   monograma: "GP",
   especialidad: "Odontología general",
   titulo: "Cirujano Dentista",
   cedula: "2740104",
+  anosExperiencia: 25,
+} as const;
+
+/**
+ * El WhatsApp de siempre: el del encabezado, el del botón grande y el del pie.
+ * Es el número que la doctora contesta, sea cual sea la sede a la que se vaya.
+ */
+export const whatsappPrincipal: Telefono = {
+  visible: "246 463 5223",
+  e164: "522464635223",
+};
+
+/** Mensaje por defecto. Baja la fricción de escribir el primer mensaje, que es
+ *  donde se pierde la mayoría de las conversiones. */
+export const MENSAJE_WHATSAPP = "Hola Dra. Gloria, me gustaría agendar una cita.";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Las sucursales
+// ─────────────────────────────────────────────────────────────────────────────
+
+const CENTRO: Sucursal = {
+  id: "centro",
+  nombre: "Dra. Gloria Portillo Atempa",
+  etiqueta: "Consultorio del centro",
+  descriptor:
+    "Sobre Av. Lerdo de Tejada, a unos pasos del centro de Zacatelco.",
+  distintivo: null,
   direccion: {
     calle: "Av. Lerdo de Tejada 12",
     colonia: "Centro, Segunda Secc",
     codigoPostal: "90740",
     ciudad: "Zacatelco",
     estado: "Tlaxcala",
-    /** Una sola línea, para el footer y el JSON-LD. */
-    completa:
-      "Av. Lerdo de Tejada 12, Centro, Segunda Secc, 90740 Zacatelco, Tlaxcala",
   },
   coordenadas: { latitud: 19.2157807, longitud: -98.241731 },
-  /** Abre la ficha del consultorio en Google Maps, con la ruta ya lista. */
+  telefono: whatsappPrincipal,
+  whatsapp: whatsappPrincipal,
+  mensajeWhatsApp: MENSAJE_WHATSAPP,
+  horario: [
+    {
+      dias: ["lunes", "martes", "miercoles", "jueves", "viernes"],
+      abre: "09:00",
+      cierra: "20:00",
+    },
+    { dias: ["sabado"], abre: "09:00", cierra: "14:00" },
+  ],
   enlaceMapa:
-    "https://www.google.com/maps/search/?api=1&query=Av.+Lerdo+de+Tejada+12,+Centro,+Segunda+Secc,+90740+Zacatelco,+Tlaxcala",
-} as const;
+    "https://www.google.com/maps/place/Dra.+Gloria+Portillo+Atempa/@19.2157807,-98.241731,17z",
+  perfiles: [],
+  calificacion: { promedio: 4.6, total: 20 },
+  resenas: [
+    {
+      texto:
+        "Muy ética y profesional, me extrajeron mi muelita del juicio y todo estuvo muy bien. Tardé más en el proceso de anestesia que en que me la extrajeran. Recomendable al 100.",
+      autor: "Jose Luis Elias Montiel",
+    },
+    {
+      texto:
+        "Excelente dentista, trabajos muy bien hechos. Súper amable, da mucha confianza al ir con ella. Todo impecable, se nota el profesionalismo.",
+      autor: "Lorena Nava",
+    },
+    {
+      texto:
+        "Muy profesional, muy amable, hace muchos años que nos atiende a mí y a mis hijos, sus trabajos son muy buenos y de calidad, es muy recomendable.",
+      autor: "Nereyda Flores Hervert",
+    },
+  ],
+  descripcionSeo:
+    "Consultorio dental en el centro de Zacatelco, Tlaxcala. Odontología general para toda la familia con 25 años de experiencia.",
+};
 
-export const horarios = [
-  { dias: "Lunes a viernes", horas: "9:00 – 20:00", cerrado: false },
-  { dias: "Sábado", horas: "9:00 – 14:00", cerrado: false },
-  { dias: "Domingo", horas: "Cerrado", cerrado: true },
-] as const;
-
-/** Resumen del horario en una línea, como aparece en la banda de datos. */
-export const horarioResumen = "Lunes a viernes 9:00–20:00 · Sábado 9:00–14:00";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Prueba social
-// ─────────────────────────────────────────────────────────────────────────────
-
-export const calificacion = {
-  promedio: 4.6,
-  total: 20,
-  /** Ficha del consultorio en Google, para que cualquiera compruebe la nota. */
-  enlace:
-    "https://www.google.com/maps/search/?api=1&query=Dra.+Gloria+Portillo+Atempa+Zacatelco",
-} as const;
+const DENTALITOS: Sucursal = {
+  id: "dentalitos",
+  nombre: "Dentalitos Sucursal Zacatelco",
+  etiqueta: "Dentalitos",
+  descriptor:
+    "En la calle Niño Perdido, en la Sección Primera. Es la que abre los domingos.",
+  distintivo: "Abre domingos",
+  direccion: {
+    // Sin el "#": así se escribe en la ficha de Google y en schema.org.
+    calle: "Calle Niño Perdido 35",
+    colonia: "Sección Primera",
+    codigoPostal: "90740",
+    ciudad: "Zacatelco",
+    estado: "Tlaxcala",
+  },
+  coordenadas: { latitud: 19.2257947, longitud: -98.2414158 },
+  telefono: { visible: "221 193 9821", e164: "522211939821" },
+  whatsapp: { visible: "221 193 9821", e164: "522211939821" },
+  mensajeWhatsApp: "Hola, me gustaría agendar una cita en Dentalitos.",
+  horario: [
+    {
+      dias: ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"],
+      abre: "08:30",
+      cierra: "19:00",
+    },
+    { dias: ["domingo"], abre: "09:00", cierra: "17:00" },
+  ],
+  enlaceMapa:
+    "https://www.google.com/maps/place/Dentalitos+Sucursal+Zacatelco/@19.2257947,-98.2414158,17z",
+  perfiles: [
+    "https://www.facebook.com/people/Dentalitos-Zacatelco/61583930846429/",
+  ],
+  /* Google no publica un promedio para esta ficha todavía. Se queda en `null`
+     a propósito: sin dato verificable no se enseñan estrellas ni se declara una
+     calificación en los datos estructurados. */
+  calificacion: null,
+  resenas: [
+    {
+      texto:
+        "Mi nombre es Enrique Méndez, tengo 50 años de edad, soy del Estado de Puebla. Hace unos días acudí a la clínica de Dentalitos Zacatelco debido a que perdí los 4 incisivos inferiores y la C.D. Portillo muy amable me atendió, fue muy profesional, me dio varias opciones y precios de prótesis, y el día de hoy pude pasar a recoger mi prótesis. Pude volver a hablar con confianza, sonreír y comer nuevamente de manera normal. Me comentó que me llevaría aproximadamente 3 días acostumbrarme a la prótesis, pero a mí solo me llevó 3 horas adaptarme. Recomiendo muy ampliamente los servicios dentales en Dentalitos Zacatelco: el consultorio es muy bonito, limpio, muy iluminado, cuenta con equipo moderno y el trato es excelente.",
+      autor: "Enrique Méndez",
+    },
+    {
+      texto:
+        "Excelente atención y servicio. El lugar se encuentra limpio y ordenado y te dan una rápida solución. Lo recomiendo totalmente.",
+      autor: "Emma Bradley",
+    },
+    {
+      texto:
+        "Me encantó el consultorio; las instalaciones son muy bonitas y el trato del personal fue excepcional.",
+      autor: "Kimberly",
+    },
+    {
+      texto:
+        "Muy buena atención, el trabajo de calidad y excelencia, lo recomiendo. Te explican a detalle tus dudas.",
+      autor: "Abraham Mozo Luna",
+    },
+  ],
+  descripcionSeo:
+    "Dentalitos, consultorio dental en la Sección Primera de Zacatelco, Tlaxcala. Odontología general para toda la familia, abierto de lunes a domingo.",
+};
 
 /**
- * Reseñas reales tomadas del perfil de Google del consultorio.
- * Solo se corrigió ortografía evidente del original; el contenido es literal.
+ * Las sedes, en el orden en que aparecen en la página. La primera es la
+ * principal: de ella salen los datos por defecto del encabezado y del SEO.
  */
-export const resenas = [
-  {
-    texto:
-      "Muy ética y profesional, me extrajeron mi muelita del juicio y todo estuvo muy bien. Tardé más en el proceso de anestesia que en que me la extrajeran. Recomendable al 100.",
-    autor: "Jose Luis Elias Montiel",
-  },
-  {
-    texto:
-      "Excelente dentista, trabajos muy bien hechos. Súper amable, da mucha confianza al ir con ella. Todo impecable, se nota el profesionalismo.",
-    autor: "Lorena Nava",
-  },
-  {
-    texto:
-      "Muy profesional, muy amable, hace muchos años que nos atiende a mí y a mis hijos, sus trabajos son muy buenos y de calidad, es muy recomendable.",
-    autor: "Nereyda Flores Hervert",
-  },
-] as const;
+export const sucursales: readonly Sucursal[] = [CENTRO, DENTALITOS];
+export const sedePrincipal = sucursales[0];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Secciones
@@ -133,24 +305,30 @@ export const hero = {
 export const navegacion = [
   { texto: "Tratamientos", ancla: "#tratamientos" },
   { texto: "Reseñas", ancla: "#resenas" },
-  { texto: "Ubicación", ancla: "#ubicacion" },
+  // El ancla no cambia: está publicada y puede haber enlaces externos.
+  { texto: "Sucursales", ancla: "#ubicacion" },
 ] as const;
 
 export const barraDatos = {
-  experiencia: { cifra: "25", texto: "años de experiencia en odontología general" },
-  cedula: { cifra: consultorio.cedula, texto: "Cédula profesional" },
-  horario: { cifra: "Lun a Sáb", texto: horarioResumen },
-  resenas: `${calificacion.total} reseñas en Google`,
+  experiencia: {
+    cifra: String(doctora.anosExperiencia),
+    texto: "años de experiencia en odontología general",
+  },
+  cedula: { cifra: doctora.cedula, texto: "Cédula profesional" },
+  horario: {
+    cifra: "Lun a Dom",
+    texto: "Entre las dos sucursales, consulta todos los días de la semana",
+  },
 } as const;
 
 export const sobreLaDoctora = {
   kicker: "Conózcala",
   titulo: "Conoce a la Dra. Gloria",
   parrafos: [
-    "La Dra. Gloria Portillo Atempa atiende en Zacatelco desde hace 25 años. En ese tiempo ha acompañado a familias enteras: pacientes que llegaron de niños hoy traen a sus propios hijos al mismo consultorio.",
+    "La Dra. Gloria Portillo Atempa atiende en Zacatelco desde hace 25 años. En ese tiempo ha acompañado a familias enteras: pacientes que llegaron de niños hoy traen a sus propios hijos. Hoy atiende en dos consultorios del pueblo.",
     "Su forma de trabajar es sencilla: revisar con calma, explicar lo que encuentra en palabras claras y proponer solo el tratamiento que hace falta. Antes de empezar, usted sabrá qué se va a hacer, cuánto tiempo toma y cuánto cuesta.",
   ],
-  credencial: `${consultorio.titulo} · Cédula profesional ${consultorio.cedula}`,
+  credencial: `${doctora.titulo} · Cédula profesional ${doctora.cedula}`,
 } as const;
 
 export const servicios: ReadonlyArray<{
@@ -286,12 +464,12 @@ export const porQue = {
     {
       titulo: "Horario que alcanza",
       texto:
-        "Hasta las 8 de la noche entre semana y sábados por la mañana, para que no tenga que faltar al trabajo.",
+        "Entre las dos sedes hay consulta los siete días: hasta las 8 de la noche en el centro y también los domingos en Dentalitos.",
     },
     {
-      titulo: "En el centro, cerca de casa",
+      titulo: "Dos consultorios en Zacatelco",
       texto:
-        "Sobre Av. Lerdo de Tejada, a unos pasos del centro de Zacatelco y con acceso desde municipios vecinos.",
+        "Uno sobre Av. Lerdo de Tejada, a unos pasos del centro; el otro en Niño Perdido, en la Sección Primera. Vaya al que le quede más cerca.",
     },
   ],
 } as const;
@@ -304,7 +482,7 @@ export const porQue = {
  * `originales/consultorio/`.
  */
 export const instalaciones = {
-  titulo: "Así es el consultorio",
+  titulo: "Así es el consultorio del centro",
   entradilla:
     "Antes de venir puede ver dónde va a sentarse. Toque una foto para verla en grande.",
   fotos: [
@@ -327,13 +505,11 @@ export const instalaciones = {
   ],
 } as const;
 
-export const ubicacion = {
+export const sucursalesSeccion = {
   kicker: "Visítenos",
-  titulo: "Dónde y cuándo",
-} as const;
-
-export const llamadoFinal = {
-  titulo: "Agende su cita por WhatsApp",
-  parrafo:
-    "Escríbanos con el motivo de su consulta y le confirmamos horario el mismo día.",
+  titulo: "Dos consultorios en Zacatelco",
+  entradilla:
+    "La misma doctora atiende en dos direcciones del pueblo. Los tratamientos y el trato son los mismos: elija la que le quede más cerca, o la que abra el día que puede venir.",
+  cierre:
+    "Las dos están en Zacatelco, a poco más de un kilómetro una de la otra.",
 } as const;

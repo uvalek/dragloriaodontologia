@@ -29,11 +29,13 @@ Otros comandos:
 
 | Quiero cambiar… | Archivo |
 |---|---|
-| Teléfono, WhatsApp, mensaje precargado | `lib/contenido.ts` → `contacto` |
-| Dirección, cédula, horarios | `lib/contenido.ts` → `consultorio`, `horarios` |
+| Datos de una sucursal (dirección, teléfono, horario, reseñas) | `lib/contenido.ts` → `sucursales` |
+| Agregar otra sucursal | `lib/contenido.ts` → una entrada más en `sucursales`; todo lo demás se duplica solo |
+| Nombre, cédula, títulos de la doctora | `lib/contenido.ts` → `doctora` |
+| WhatsApp principal (el del hero y el pie) | `lib/contenido.ts` → `whatsappPrincipal` |
 | Textos de cualquier sección | `lib/contenido.ts` |
 | Agregar o quitar un tratamiento | `lib/contenido.ts` → `servicios` (la rejilla se reacomoda sola) |
-| Reseñas | `lib/contenido.ts` → `resenas` |
+| Reseñas | `lib/contenido.ts` → `sucursales[].resenas` |
 | Títulos y certificaciones | `lib/contenido.ts` → `formacion` |
 | Fotos del consultorio | `lib/contenido.ts` → `instalaciones` |
 | Colores y tipografías | `app/globals.css` |
@@ -62,12 +64,13 @@ components/
   PorQue.tsx        Las cuatro razones
   Formacion.tsx     Títulos y certificaciones
   Instalaciones.tsx Galería del consultorio, con visor
-  Ubicacion.tsx     Dirección, horario y mapa
+  Ubicacion.tsx     Las dos sucursales: dirección, horario y mapa de cada una
   PieDePagina.tsx   Contacto repetido
   EnlaceWhatsApp.tsx  Enlace que registra el clic
   AnimarAlEntrar.tsx  Observador de las animaciones
 lib/
-  contenido.ts      Todo el texto
+  contenido.ts      Todo el texto y los datos de las dos sucursales
+  horarios.ts       Convierte un horario en tabla, resumen y datos de Google
   datos-negocio.ts  Datos estructurados para Google
   sitio.ts          URL pública
 public/
@@ -136,6 +139,34 @@ Dos cosas que conviene revisar al cambiar la foto del hero:
   que mirar el resultado.
 - **El texto alternativo** en `lib/contenido.ts`, que describe la foto para
   quien no puede verla y para Google.
+
+## Dos sucursales
+
+El consultorio tiene dos sedes y el sitio está montado para N, no para dos:
+`sucursales` es un array y las secciones lo recorren. Agregar una tercera es
+añadir una entrada; no hay que tocar ningún componente.
+
+Lo que conviene saber antes de editar:
+
+- **Los datos derivables no se guardan.** El `href` de un teléfono, la dirección
+  en una línea, la URL del mapa y el enlace de WhatsApp se calculan con las
+  funciones de `contenido.ts` (`hrefTel`, `direccionUnaLinea`, `hrefMapaEmbebido`…).
+  Antes estaban escritos a mano —el teléfono existía en cuatro formatos y la
+  dirección dentro de tres URLs— y era cuestión de tiempo que dejaran de
+  coincidir.
+- **El horario se guarda una vez**, en 24 horas, y `lib/horarios.ts` produce la
+  tabla, el resumen de una línea y el formato de Google. Antes el mismo dato
+  estaba escrito en cuatro sitios.
+- **`calificacion` puede ser `null`.** Google no publica una nota para todas las
+  fichas. Cuando es `null` no se enseñan estrellas ni se declara calificación en
+  los datos estructurados. **No se inventa ni se promedia con la otra sede**:
+  declarar estrellas que no existen es de las pocas cosas por las que Google
+  penaliza de verdad.
+- **El `name` de cada sucursal debe coincidir letra por letra con su ficha de
+  Google.** Es lo que une el marcado del sitio con el perfil del negocio.
+- **El identificador de la sede principal en el JSON-LD no se toca.** Sigue
+  siendo `#consultorio`; cambiarlo haría que Google reinterprete la entidad
+  desde cero.
 
 ## Paleta
 

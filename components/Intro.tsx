@@ -73,7 +73,7 @@ export default function Intro() {
       >
         <Dato cifra={<Contador valor={25} ancho={2} />} texto={barraDatos.experiencia.texto} retraso={0} />
         <Dato cifra={barraDatos.cedula.cifra} texto={barraDatos.cedula.texto} retraso={90} />
-        <Dato cifra="Lun a Sáb" texto={barraDatos.horario.texto} retraso={180} />
+        <Dato cifra={barraDatos.horario.cifra} texto={barraDatos.horario.texto} retraso={180} />
       </div>
     </section>
   );
