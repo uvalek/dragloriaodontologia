@@ -386,12 +386,17 @@
 }
 
 @layer utilities {
-  /* Galería del consultorio: una columna en el celular, dos a partir de
-     tablet. Son cuatro fotos, así que dos columnas dan un 2x2 parejo. */
+  /* Galería de los consultorios: una columna en el celular, dos en tablet y
+     tres en escritorio. Con cinco fotos, tres columnas dan 3 + 2; con dos
+     quedaría una sola en la última fila. */
   .rejilla-galeria { grid-template-columns: 1fr; }
 
   @media (min-width: 700px) {
     .rejilla-galeria { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1040px) {
+    .rejilla-galeria { grid-template-columns: repeat(3, 1fr); }
   }
 }
 

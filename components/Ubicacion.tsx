@@ -32,17 +32,6 @@ export default function Ubicacion() {
           data-animar
           style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: "clamp(26px, 3vw, 44px)" }}
         >
-          <span
-            style={{
-              fontSize: "clamp(11px, 1vw, 13px)",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--color-kicker)",
-            }}
-          >
-            {sucursalesSeccion.kicker}
-          </span>
           <h2 className="subrayado" style={{ fontSize: "clamp(34px, 4.4vw, 62px)", maxWidth: "20ch" }}>
             {sucursalesSeccion.titulo}
           </h2>

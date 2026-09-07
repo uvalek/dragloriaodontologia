@@ -234,28 +234,10 @@ const DENTALITOS: Sucursal = {
      a propósito: sin dato verificable no se enseñan estrellas ni se declara una
      calificación en los datos estructurados. */
   calificacion: null,
-  resenas: [
-    {
-      texto:
-        "Mi nombre es Enrique Méndez, tengo 50 años de edad, soy del Estado de Puebla. Hace unos días acudí a la clínica de Dentalitos Zacatelco debido a que perdí los 4 incisivos inferiores y la C.D. Portillo muy amable me atendió, fue muy profesional, me dio varias opciones y precios de prótesis, y el día de hoy pude pasar a recoger mi prótesis. Pude volver a hablar con confianza, sonreír y comer nuevamente de manera normal. Me comentó que me llevaría aproximadamente 3 días acostumbrarme a la prótesis, pero a mí solo me llevó 3 horas adaptarme. Recomiendo muy ampliamente los servicios dentales en Dentalitos Zacatelco: el consultorio es muy bonito, limpio, muy iluminado, cuenta con equipo moderno y el trato es excelente.",
-      autor: "Enrique Méndez",
-    },
-    {
-      texto:
-        "Excelente atención y servicio. El lugar se encuentra limpio y ordenado y te dan una rápida solución. Lo recomiendo totalmente.",
-      autor: "Emma Bradley",
-    },
-    {
-      texto:
-        "Me encantó el consultorio; las instalaciones son muy bonitas y el trato del personal fue excepcional.",
-      autor: "Kimberly",
-    },
-    {
-      texto:
-        "Muy buena atención, el trabajo de calidad y excelencia, lo recomiendo. Te explican a detalle tus dudas.",
-      autor: "Abraham Mozo Luna",
-    },
-  ],
+  /* Sin reseñas por ahora: las de la ficha de Google todavía no se publican
+     aquí. El array vacío está soportado — la sección simplemente no dibuja el
+     grupo. */
+  resenas: [],
   descripcionSeo:
     "Dentalitos, consultorio dental en la Sección Primera de Zacatelco, Tlaxcala. Odontología general para toda la familia, abierto de lunes a domingo.",
 };
@@ -482,7 +464,7 @@ export const porQue = {
  * `originales/consultorio/`.
  */
 export const instalaciones = {
-  titulo: "Así es el consultorio del centro",
+  titulo: "Así son los consultorios",
   entradilla:
     "Antes de venir puede ver dónde va a sentarse. Toque una foto para verla en grande.",
   fotos: [
@@ -502,11 +484,14 @@ export const instalaciones = {
       src: "/img/consultorio/4.webp",
       alt: "Mueble de instrumental con la unidad dental y contenedor de residuos",
     },
+    {
+      src: "/img/consultorio/dentalitos-1.webp",
+      alt: "Sala de atención de Dentalitos, con unidad dental, lavabo y pantalla",
+    },
   ],
 } as const;
 
 export const sucursalesSeccion = {
-  kicker: "Visítenos",
   titulo: "Dos consultorios en Zacatelco",
   entradilla:
     "La misma doctora atiende en dos direcciones del pueblo. Los tratamientos y el trato son los mismos: elija la que le quede más cerca, o la que abra el día que puede venir.",

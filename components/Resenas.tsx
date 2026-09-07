@@ -21,6 +21,8 @@ function Estrella({ llena }: { llena: boolean }) {
  * resto en vez de fundirse con las secciones blancas.
  */
 export default function Resenas() {
+  const conReseñas = sucursales.filter((s) => s.resenas.length > 0);
+
   return (
     <section
       id="resenas"
@@ -37,14 +39,18 @@ export default function Resenas() {
         </h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "clamp(34px, 4vw, 56px)" }}>
-          {sucursales.map((sede) => (
-            <GrupoResenas key={sede.id} sede={sede} />
+          {/* Solo las sedes que tienen reseñas publicadas. Un grupo vacío, con
+              su encabezado y su bloque de conteo en cero, diría menos que no
+              enseñar nada. */}
+          {conReseñas.map((sede) => (
+              <GrupoResenas key={sede.id} sede={sede} conEncabezado={conReseñas.length > 1} />
           ))}
         </div>
 
         <p data-animar style={{ margin: "clamp(24px, 3vw, 40px) 0 0", fontSize: 15, color: "rgba(255,255,255,0.66)" }}>
-          Todas son reseñas publicadas en las fichas de Google de cada consultorio.
-          Puede abrirlas y leerlas completas.
+          {conReseñas.length > 1
+            ? "Todas son reseñas publicadas en las fichas de Google de cada consultorio. Puede abrirlas y leerlas completas."
+            : "Todas son reseñas publicadas en la ficha de Google del consultorio. Puede abrirlas y leerlas completas."}
         </p>
       </div>
     </section>
@@ -65,7 +71,7 @@ export default function Resenas() {
  * La partición se deriva del array; antes se leía por índice fijo y una cuarta
  * reseña simplemente no se dibujaba.
  */
-function GrupoResenas({ sede }: { sede: Sucursal }) {
+function GrupoResenas({ sede, conEncabezado }: { sede: Sucursal; conEncabezado: boolean }) {
   const porLongitud = [...sede.resenas].sort((a, b) => a.texto.length - b.texto.length);
   const arriba = porLongitud.slice(0, 2);
   /* El resto conserva el orden en que están escritas. */
@@ -74,16 +80,19 @@ function GrupoResenas({ sede }: { sede: Sucursal }) {
 
   return (
     <div>
-      <h3
-        data-animar
-        style={{
-          fontSize: "clamp(20px, 2vw, 26px)",
-          marginBottom: "clamp(14px, 1.6vw, 22px)",
-          color: "#fff",
-        }}
-      >
-        {sede.etiqueta}
-      </h3>
+      {/* El nombre de la sede solo hace falta cuando hay más de un grupo. */}
+      {conEncabezado && (
+        <h3
+          data-animar
+          style={{
+            fontSize: "clamp(20px, 2vw, 26px)",
+            marginBottom: "clamp(14px, 1.6vw, 22px)",
+            color: "#fff",
+          }}
+        >
+          {sede.etiqueta}
+        </h3>
+      )}
 
       <div
         style={{
@@ -154,7 +163,7 @@ function Nota({ sede }: { sede: Sucursal }) {
           <div style={{ display: "flex", gap: 3 }} aria-hidden="true">
             {[0, 1, 2, 3, 4].map((i) => (
               <Estrella key={i} llena={i < enteras} />
-            ))}
+          ))}
           </div>
           <p style={{ margin: 0, fontSize: 17, lineHeight: 1.4, color: "rgba(255,255,255,0.78)" }}>
             {c.total} reseñas
