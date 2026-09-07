@@ -54,12 +54,6 @@ export default function Ubicacion() {
           ))}
         </div>
 
-        <p
-          data-animar
-          style={{ margin: "clamp(28px, 3vw, 44px) 0 0", fontSize: 15, color: "var(--color-suave)" }}
-        >
-          {sucursalesSeccion.cierre}
-        </p>
       </div>
     </section>
   );

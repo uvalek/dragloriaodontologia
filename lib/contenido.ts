@@ -495,6 +495,4 @@ export const sucursalesSeccion = {
   titulo: "Dos consultorios en Zacatelco",
   entradilla:
     "La misma doctora atiende en dos direcciones del pueblo. Los tratamientos y el trato son los mismos: elija la que le quede más cerca, o la que abra el día que puede venir.",
-  cierre:
-    "Las dos están en Zacatelco, a poco más de un kilómetro una de la otra.",
 } as const;
