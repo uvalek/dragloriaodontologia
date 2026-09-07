@@ -436,7 +436,7 @@ export const porQue = {
     {
       titulo: "Siempre la misma doctora",
       texto:
-        "Usted no pasa con un dentista distinto cada vez. La Dra. Gloria lleva su historial y conoce su boca.",
+        "Usted no pasa con un dentista distinto cada vez. La Dra. Gloria atiende personalmente en los dos consultorios, lleva su historial y conoce su boca.",
     },
     {
       titulo: "Se explica antes de tratar",
@@ -487,6 +487,10 @@ export const instalaciones = {
     {
       src: "/img/consultorio/dentalitos-1.webp",
       alt: "Sala de atención de Dentalitos, con unidad dental, lavabo y pantalla",
+    },
+    {
+      src: "/img/consultorio/dentalitos-2.webp",
+      alt: "Unidad dental de Dentalitos con el mueble de instrumental al fondo",
     },
   ],
 } as const;
