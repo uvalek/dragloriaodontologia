@@ -174,14 +174,20 @@ export default function Hero() {
           </div>
         </div>
 
-        <h2 className="titular-hero titular-sangrado linea-recorte" data-entrada style={{ ["--retraso" as string]: "140ms" }}>
+        {/* Las líneas 2 y 3 del titular eran <h2>. Se ven igual, pero como
+            encabezados no decían nada: quien navega con lector de pantalla
+            saltando de título en título oía "Estética & Salud" y "Dental
+            Integral" sueltos, y en el índice de la página competían con los
+            títulos reales de cada sección. Son continuación de la misma frase,
+            así que son párrafos. La h1 de la página es una sola. */}
+        <p className="titular-hero titular-sangrado linea-recorte" data-entrada style={{ ["--retraso" as string]: "140ms" }}>
           <span>{hero.titulo[1]}</span>
-        </h2>
+        </p>
 
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(14px, 2vw, 40px)" }}>
-          <h2 className="titular-hero linea-recorte" data-entrada style={{ ["--retraso" as string]: "200ms" }}>
+          <p className="titular-hero linea-recorte" data-entrada style={{ ["--retraso" as string]: "200ms" }}>
             <span>{hero.titulo[2]}</span>
-          </h2>
+          </p>
 
           {/* En el diseño este botón apuntaba a #agendar, un ancla que no existe
               en la página: el botón más visible del sitio no llevaba a ningún

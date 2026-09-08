@@ -158,10 +158,14 @@ Lo que conviene saber antes de editar:
   tabla, el resumen de una línea y el formato de Google. Antes el mismo dato
   estaba escrito en cuatro sitios.
 - **`calificacion` puede ser `null`.** Google no publica una nota para todas las
-  fichas. Cuando es `null` no se enseñan estrellas ni se declara calificación en
-  los datos estructurados. **No se inventa ni se promedia con la otra sede**:
-  declarar estrellas que no existen es de las pocas cosas por las que Google
-  penaliza de verdad.
+  fichas. Cuando es `null` no se enseñan estrellas. **No se inventa ni se
+  promedia con la otra sede.**
+- **La calificación nunca va en el JSON-LD.** El 4.6 se ve en la página, pero no
+  se declara como `aggregateRating`: sería el negocio publicando su propia nota
+  en su propio sitio, que es lo que Google llama una reseña de parte interesada.
+  No la muestra para negocios locales —las estrellas del resultado salen de la
+  ficha de Google Business— y sí es motivo de acción manual. Por lo mismo, las
+  reseñas se enseñan como texto y no como marcado `Review`.
 - **El `name` de cada sucursal debe coincidir letra por letra con su ficha de
   Google.** Es lo que une el marcado del sitio con el perfil del negocio.
 - **El identificador de la sede principal en el JSON-LD no se toca.** Sigue

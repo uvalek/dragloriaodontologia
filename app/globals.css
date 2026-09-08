@@ -308,6 +308,11 @@
 
   /* Las tres líneas del titular del hero. */
   .titular-hero {
+    /* La clase declara la tipografía en vez de heredarla de `h1, h2, h3`: las
+       tres líneas del titular son un solo texto partido a mano, y solo la
+       primera es un encabezado de verdad. Así las otras dos pueden ser párrafos
+       sin perder ni un píxel. */
+    font-family: var(--font-titulo);
     font-size: clamp(34px, 10.4vw, 128px);
     line-height: 0.98;
     font-weight: 500;

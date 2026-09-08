@@ -22,11 +22,24 @@ const outfit = Outfit({
   display: "swap",
 });
 
+/**
+ * El título empieza por lo que la gente escribe en Google — "dentista en
+ * Zacatelco" — y no por el nombre de la doctora. Al buscar un dentista casi
+ * nadie sabe todavía cómo se llama, así que la palabra que hace coincidir la
+ * búsqueda con el resultado tiene que ir primero, donde Google le da más peso y
+ * donde el ojo la encuentra antes en la lista. El nombre va detrás, que es lo
+ * que necesita quien ya la conoce y la busca por nombre.
+ *
+ * Los 60 caracteres son el ancho que Google muestra en un resultado de móvil;
+ * pasarse no penaliza, pero corta la frase con puntos suspensivos.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(SITIO),
-  title: "Dra. Gloria Portillo Atempa — Dentista en Zacatelco, Tlaxcala",
+  title: "Dentista en Zacatelco | Dra. Gloria Portillo Atempa",
+  /* 156 caracteres: ubicación, lo que se atiende, lo que la distingue (abrir en
+     domingo) y qué hacer. Google la recorta cerca de 160. */
   description:
-    "Dos consultorios dentales en Zacatelco, Tlaxcala, con 25 años de experiencia: el del centro, sobre Av. Lerdo de Tejada, y Dentalitos, en la Sección Primera, abierto también los domingos. Odontología general para toda la familia.",
+    "Dentista en Zacatelco, Tlaxcala. Limpieza, resinas, endodoncia, prótesis y odontopediatría. Dos consultorios, uno abierto los domingos. Agende por WhatsApp.",
   keywords: [
     "dentista Zacatelco",
     "odontóloga Tlaxcala",
@@ -47,9 +60,9 @@ export const metadata: Metadata = {
     locale: "es_MX",
     url: SITIO,
     siteName: "Dra. Gloria Portillo Atempa",
-    title: "Dra. Gloria Portillo Atempa — Dentista en Zacatelco, Tlaxcala",
+    title: "Dentista en Zacatelco | Dra. Gloria Portillo Atempa",
     description:
-      "25 años cuidando la salud bucal de Zacatelco, ahora en dos consultorios. Odontología general para toda la familia, con explicaciones claras y sin prisas.",
+      "25 años cuidando la salud bucal de Zacatelco, en dos consultorios: el del centro y Dentalitos, abierto los domingos. Agende su cita por WhatsApp.",
     images: [
       {
         url: "/img/og-dra-gloria-portillo.webp",
@@ -58,6 +71,16 @@ export const metadata: Metadata = {
         alt: "Dra. Gloria Portillo Atempa en la recepción de su consultorio",
       },
     ],
+  },
+  /* Tarjeta de Twitter/X. Reutiliza la imagen y los textos del Open Graph, que
+     es lo que ya lee WhatsApp y Facebook; sin esta etiqueta X enseña un enlace
+     pelado en vez de la miniatura ancha. */
+  twitter: {
+    card: "summary_large_image",
+    title: "Dentista en Zacatelco | Dra. Gloria Portillo Atempa",
+    description:
+      "25 años cuidando la salud bucal de Zacatelco, en dos consultorios: el del centro y Dentalitos, abierto los domingos. Agende su cita por WhatsApp.",
+    images: ["/img/og-dra-gloria-portillo.webp"],
   },
   robots: { index: true, follow: true },
 };
