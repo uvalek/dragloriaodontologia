@@ -36,12 +36,10 @@ const DESTINO = "public/video";
  */
 const CLIPS = [
   { nombre: "hero-1", segundos: 2.5, crf: 30 },
-  // Se corta en el segundo 2.5. A partir de ahí la cámara se cierra sobre la
-  // boca abierta del paciente en primer plano, y ese plano en la primera
-  // pantalla espanta a quien ya viene con miedo al dentista. Hasta el 2.5 se ve
-  // el consultorio y al equipo trabajando en plano medio, que es lo que da
-  // confianza.
-  { nombre: "hero-2", segundos: 2.5, crf: 32 },
+  // Va entero (5.2 s): es un plano fijo y abierto del consultorio, con la
+  // doctora y la asistente trabajando, sin ningún primer plano que recortar.
+  // Al no moverse la cámara comprime muy bien y pesa menos que el clip anterior.
+  { nombre: "hero-2", crf: 32 },
 ];
 
 /**

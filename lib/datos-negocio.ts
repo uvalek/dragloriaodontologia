@@ -77,7 +77,7 @@ function nodoDoctora(urlSitio: string) {
     image: `${urlSitio}${hero.retratos[0].src}`,
 
     /* Quién la formó y qué acredita. En salud, Google pondera de quién viene la
-       información antes que las palabras que use; estos tres documentos están
+       información antes que las palabras que use; estos documentos están
        además a la vista en la página, escaneados, así que la afirmación se
        puede comprobar. Salen de `formacion` para que no haya dos versiones. */
     alumniOf: formacion.documentos.map((d) => ({

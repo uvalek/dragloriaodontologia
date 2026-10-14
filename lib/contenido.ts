@@ -417,15 +417,6 @@ export const formacion = {
         alt: "Diploma de la UPAEP por el diplomado en Odontología Estética, de 148 horas, cursado en 2013",
       },
     },
-    {
-      institucion: "Colegio de Prostodoncia e Implantología del Estado de Puebla",
-      nombre: "Seminario Odontoprotésico",
-      detalle: "16 horas crédito · 1998",
-      imagen: {
-        src: "/img/titulos/prostodoncia.webp",
-        alt: "Constancia del Colegio de Prostodoncia e Implantología del Estado de Puebla por el Primer Seminario Odontoprotésico, de 1998",
-      },
-    },
   ],
 } as const;
 
